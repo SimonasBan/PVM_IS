@@ -1,0 +1,54 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using IS_Turizmas.Models
+@model List<IS_Turizmas.Models.Marsrutai>
+@{
+    ViewData["Title"] = "FoundRoutes";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>Visų sistemos maršrutų langas</h1>
+    </div>
+    @if (ViewBag.searchedRoutes.Count > 0)
+    {
+        <div class="col-md-10 mx-auto">
+            <table class="table table-striped text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Pavadinimas</th>
+                        <th scope="col">Sukūrimo data</th>
+                        <th scope="col">Reitingas</th>
+                        <th scope="col">Autorius</th>
+                        <th scope="col">Veiksmai</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @for (var i = 0; i < ViewBag.searchedRoutes.Count; i++)
+                {
+                    <tr>
+                        <th>@(i + 1)</th>
+                        <td>@ViewBag.searchedRoutes[i].Pavadinimas</td>
+                        @{ string formatedValue = ViewBag.searchedRoutes[i].SukurimoData.ToShortDateString(); }
+                        <td>@Html.DisplayFor(model => formatedValue)</td>
+                        <td>@ViewBag.searchedRoutes[i].GetRatingAverage()</td>
+                        <td>
+                            <a asp-action="Index" asp-controller="User" asp-route-id="@ViewBag.searchedRoutes[i].FkRegistruotasVartotojasNavigation.Id">
+                                @ViewBag.searchedRoutes[i].FkRegistruotasVartotojasNavigation.Vardas
+                                @ViewBag.searchedRoutes[i].FkRegistruotasVartotojasNavigation.Pavarde
+                            </a>
+                        </td>
+                        <td><a asp-controller="Content" asp-action="ViewRouteInfo"
+                            asp-route-id="@ViewBag.searchedRoutes[i].Id">Maršruto informacija</a></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <h3 class="mx-auto text-center">Maršrutų rasti nepavyko</h3>
+    }
+
+}
+

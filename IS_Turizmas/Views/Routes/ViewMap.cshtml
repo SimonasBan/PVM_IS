@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<IS_Turizmas.Models.MarsrutoObjektai>
+@{
+    ViewData["Title"] = "Žemėlapis";
+    <div class="row mx-auto my-3 py-3">
+        <div class="col-md-10 mx-auto text-center">
+            <h4>@Html.DisplayFor(m=>Model[0].FkMarsrutasNavigation.Pavadinimas)</h4>
+        </div>
+    </div>
+    <div class="row mx-auto">
+        <div class="col-md-10 mx-auto">
+            <p><strong>Maršruto objektai:</strong></p>
+            <ol>
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                <li>@Html.DisplayFor( m => Model[i].FkLankytinasObjektasNavigation.Pavadinimas) 
+                <text>(@Model[i].FkLankytinasObjektasNavigation.FkValstybeNavigation.Trumpinys, @Model[i].FkLankytinasObjektasNavigation.FkValstybeNavigation.Zemynas)</text></li>
+                }
+            </ol>
+        </div>
+    </div>
+    <div class="row mx-auto">
+        <div class="col-md-10 mx-auto embeded-responsive embed-responsive-1by1 border rounded py-1 px-1 text-center">
+            <iframe width="100%" height="500em" class="embed-responsive-item" frameborder="0"
+                    src="@ViewBag.MapLink" allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+    <br />
+}
+

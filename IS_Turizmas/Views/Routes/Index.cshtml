@@ -1,0 +1,98 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using IS_Turizmas.Models
+@*@model List<IS_Turizmas.Models.PlaceOfInterest>*@
+@{
+    ViewData["Title"] = "Lankytini objektai";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>Lankytini objektai</h1>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+        <a asp-action="CreatePlaceOfInterest" asp-controller="Routes">
+            Sukurti lankytiną objektą
+        </a>
+        @*@if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }*@
+    </div>
+    @*<div class="col-md-10 mx-auto">
+            <div class="row">
+            <div class="col-md-6"><a asp-action="CreateRouteDescription">Kurti naują maršrutą</a></div>
+            <div class="col-md-6 text-md-right"><a asp-action="CalculateRouteUniqueness">Apskaičiuoti maršruto unikalumo indeksą</a></div>
+            </div>
+        </div>*@
+    <div class="col-md-10 mx-auto">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pavadinimas</th>
+                    <th scope="col">Aprašymas</th>
+                    <th scope="col">Miestas</th>
+                    <th scope="col">Adresas</th>
+                    <th scope="col">Savivaldybė</th>
+                    <th scope="col">Koordinatės</th>
+                    <th scope="col">Bilieto kaina</th>
+                    <th scope="col">Taškai</th>
+                    <th scope="col">Veiksmai</th>
+                </tr>                
+            </thead>
+            <tbody>
+                @for (var i = 0; i < ViewBag.places.Count; i++)
+                {
+                <tr>
+                    <th>@(i + 1)</th>
+                    <td>@ViewBag.places[i].Pavadinimas</td>
+                    <td>@ViewBag.places[i].Aprasymas</td>
+                    <td>@ViewBag.places[i].Miestas</td>
+                    <td>@ViewBag.places[i].Adresas</td>
+                    <td>@ViewBag.places[i].Savivaldybe</td>
+                    <td>@ViewBag.places[i].Koordinates</td>
+                    <td>@String.Format("{0:C2}", @ViewBag.places[i].Bilieto_kaina)</td>
+                    <td>@ViewBag.places[i].Taskai</td>
+                    <td>
+                        <a asp-action="TryDeletePlaceOfInterest" asp-controller="Routes" asp-route-id="@ViewBag.places[i].Id">
+                            Trinti
+                        </a>
+                        <a asp-action="EditPlaceOfInterest" asp-controller="Routes" asp-route-id="@ViewBag.places[i].Id">
+                            Redaguoti
+                        </a>
+                    </td>
+                </tr>
+                }                
+            </tbody>
+        </table>
+    </div>
+
+    <!--Delete confirmation window-->
+    <!--<div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog" aria-labelledby="Delete confirmation window" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmation">Šalinimo patvirtinimas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Ar tikrai norite ištrinti maršrutą?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
+                    <form class="deleteForm" method="POST" asp-action="DeleteRoute">
+                        <input id="deleteID" name="id" type="hidden" value="" />
+                        <button type="submit" class="btn btn-danger" >Šalinti</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>-->
+}

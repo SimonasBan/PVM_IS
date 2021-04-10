@@ -1,0 +1,82 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using IS_Turizmas.Models
+@model IS_Turizmas.Models.PlaceOfInterest
+@{
+    <script>
+        document.getElementById("description-text").value += 'Test Feedback';
+    </script>
+    ViewData["Title"] = "redaguoti lankytiną objektą";
+<div class="container-fluid">
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h4>Redaguoti lankytiną objektą</h4>
+    </div>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <form asp-controller="Routes" asp-action="SaveEditedPlaceOfInterest" asp-route-id="@ViewBag.PlaceToEdit.Id" method="POST">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label><strong>Pavadinimas</strong></label>
+                    <input type="text" class="form-control" asp-for="Pavadinimas" value="@ViewBag.PlaceToEdit.Pavadinimas" placeholder="Įveskite pavadinimą" />
+                    <span asp-validation-for="Pavadinimas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label><strong>Aprašymas</strong></label>
+                    <input type="text" class="form-control" asp-for="Aprasymas" value="@ViewBag.PlaceToEdit.Aprasymas" />
+                    @*<textarea id="description-text" class="form-control" name="Aprasymas" asp-for="Aprasymas" rows="4" cols="50">aaaaa</textarea>*@
+                    <span asp-validation-for="Aprasymas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label><strong>Miestas</strong></label>
+                    <input type="text" class="form-control" value="@ViewBag.PlaceToEdit.Miestas" asp-for="Miestas"></input>
+                    <span asp-validation-for="Miestas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label><strong>Adresas</strong></label>
+                    <input type="text" class="form-control" value="@ViewBag.PlaceToEdit.Adresas" asp-for="Adresas"></input>
+                    <span asp-validation-for="Adresas" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label><strong>Savivaldybė</strong></label>
+                    <input type="text" class="form-control" value="@ViewBag.PlaceToEdit.Savivaldybe" asp-for="Savivaldybe"></input>
+                    <span asp-validation-for="Savivaldybe" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label><strong>Koordinatės</strong></label>
+                    <input type="text" class="form-control" value="@ViewBag.PlaceToEdit.Koordinates" asp-for="Koordinates"></input>
+                    <span asp-validation-for="Koordinates" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label><strong>Bilieto kaina</strong></label>
+                    <input type="number" step="0.01" class="form-control" value="@ViewBag.PlaceToEdit.Bilieto_kaina" asp-for="Bilieto_kaina"></input>
+                    <span asp-validation-for="Bilieto_kaina" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label><strong>Taškai</strong></label>
+                    <input type="number" step="1" class="form-control" value="@ViewBag.PlaceToEdit.Taskai" asp-for="Taskai"></input>
+                    <span asp-validation-for="Taskai" class="text-danger"></span>
+                </div>
+                <!--<div class="form-group">
+                <label for="name">Parašykite pavadinimą</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Įveskite paieškos žodį">
+
+
+                <label for="comment">Parašykite komentarą</label>
+                <textarea asp-for="Tekstas" class="form-control" id="comment" rows="3"></textarea>
+                <span asp-validation-for="Tekstas" class="text-danger"></span>-->
+                @*<input type="hidden" asp-for="FkMarsrutas" value=@ViewBag.id />*@
+                <!--</div>-->
+                <div>
+                    <button type="submit" class="btn btn-primary">Sukurti</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+</div>
+}

@@ -1,0 +1,93 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using Microsoft.AspNetCore.Identity
+@using IS_Turizmas.Models
+@model IS_Turizmas.Models.RegistruotiVartotojai
+@inject SignInManager<RegistruotiVartotojai> SignInManager
+@inject UserManager<RegistruotiVartotojai> UserManager
+@{
+    ViewData["Title"] = "Profilis";
+
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>Profilis</h1>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+
+        @if(Model.Nuotrauka != null)
+        {
+            <img class="img-thumbnail border rounded-circle profile" src="~/@Model.Nuotrauka" />
+        }
+        else
+        {
+            <img class="img-thumbnail border rounded-circle profile" src="~/images/Users/default.png" />
+        }
+        
+        <div class="my-2">
+            @if (Model.Id == int.Parse(SignInManager.UserManager.GetUserId(User)))
+            {
+                <a asp-controller="User" asp-action="Logout">Atsijungti</a> <text>|</text> <a asp-action="EditUser" asp-route-id="@Model.Id">Redaguoti </a> <text>|</text> <a asp-action="DeleteUser" asp-route-id="@Model.Id"> Anuliuoti profilį </a>
+            }
+        </div>
+
+        <div class="py-2">
+            @if (Model.Id != int.Parse(SignInManager.UserManager.GetUserId(User)))
+            {
+                @if (ViewBag.IsSubscribed == false)
+                {
+                    <a asp-action="Subscribe" asp-route-id = "@Model.Id" class="btn btn-danger">Prenumeruoti vartotoją</a>
+                }
+                else
+                {
+                    <a asp-action="Subscribe" asp-route-id = "@Model.Id" class="btn btn-secondary">Vartotojas užprenumeruotas</a>
+                }
+
+
+            }
+
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-md-10 mx-auto">
+                <div>
+                    <h5>Aktyvumos lygis: @ViewBag.activityLevel.Pavadinimas</h5>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style=" width:@((Model.AktyvumoTaskai-ViewBag.activityLevel.Nuo) * 100 / (ViewBag.activityLevel.Iki - ViewBag.activityLevel.Nuo))% " aria-valuenow="@Model.AktyvumoTaskai" aria-valuemin="@((ViewBag.activityLevel).Nuo)" aria-valuemax="@((ViewBag.activityLevel).Iki)">@Model.AktyvumoTaskai</div>
+                    </div>
+                </div>
+                <div>
+                    <h5>Profilio informacija:</h5>
+                    <ul>
+                        <li><p><strong>Prisijungimo vardas: </strong>@Model.Slapyvardis </p></li>
+                        <li><p><strong>Vardas: </strong>@Model.Vardas</p></li>
+                        <li><p><strong>Pavardė: </strong>@Model.Pavarde</p></li>
+                        <li><p><strong>El. paštas: </strong>@Model.ElPastas</p></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Dabartinis planas</h5>
+                    @if (Model.VartotojoPlanai.Where(o => o.DataIki == null).FirstOrDefault() != null)
+                    {
+                        <p>@Model.VartotojoPlanai.Where(o => o.DataIki == null).FirstOrDefault().TipasNavigation.Name </p>
+                    }
+                    else
+                    {
+                        <p>Planas nepasirinktas</p>
+                    }
+                    @if (Model.Id == int.Parse(SignInManager.UserManager.GetUserId(User)))
+                    {
+                        <a class="btn btn-primary" asp-action="ChangePlan" asp-route-id="@Model.Id">Keisti planą</a>
+                    }                        
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+
+}
