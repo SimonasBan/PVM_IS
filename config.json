@@ -1,7 +1,6 @@
 {
   "GeoCodingkey": "AIzaSyA6a37lcJTN4IMJg6lfx4vA9aLWZT9OSCU",
   "MapEmbeded": "AIzaSyDi6j9Rg9H2SGYA6gid9Zv_CU1AO29NOaU",
-  //"ConfigurationString": "server=remotemysql.com;port=3306;user=vhs4kNSPtc;password=TakcHcGyRe;database=vhs4kNSPtc"
   "ConfigurationString": "server=remotemysql.com;port=3306;user=K7ziUVAusl;password=451Oe2rIK0;database=K7ziUVAusl"
   //database at: https://remotemysql.com/phpmyadmin/index.php?db=K7ziUVAusl
 }
