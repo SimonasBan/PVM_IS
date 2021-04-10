@@ -56,7 +56,7 @@
                     <td>@ViewBag.places[i].Adresas</td>
                     <td>@ViewBag.places[i].Savivaldybe</td>
                     <td>@ViewBag.places[i].Koordinates</td>
-                    <td>@String.Format("{0:C2}", @ViewBag.places[i].Bilieto_kaina)</td>
+                    <td>@String.Format("{0:N2}", @ViewBag.places[i].Bilieto_kaina) &#8364;</td>
                     <td>@ViewBag.places[i].Taskai</td>
                     <td>
                         <a asp-action="TryDeletePlaceOfInterest" asp-controller="Routes" asp-route-id="@ViewBag.places[i].Id">
