@@ -20,21 +20,21 @@ namespace IS_Turizmas.SupportClasses
             }
         }
 
-        public override bool IsInRole(string role)
-        {
-            ApplicationDbContext _context = new ApplicationDbContext();
-            // ...
-            if (username == null)
-            {
-                return false;
-            }
-            if(_context.VartotojoPlanai.Where(o => o.TipasNavigation.Name==role && o.DataIki==null &&
-            o.FkRegistruotasVartotojasNavigation.Slapyvardis == username).FirstOrDefault() != null)
-            {
-                return true;
-            }
-            return false;
-        }
+        //public override bool IsInRole(string role)
+        //{
+        //    ApplicationDbContext _context = new ApplicationDbContext();
+        //    // ...
+        //    if (username == null)
+        //    {
+        //        return false;
+        //    }
+        //    if(_context.VartotojoPlanai.Where(o => o.TipasNavigation.Name==role && o.DataIki==null &&
+        //    o.FkRegistruotasVartotojasNavigation.Slapyvardis == username).FirstOrDefault() != null)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
     }
 
     public class ClaimsTransformer : IClaimsTransformation

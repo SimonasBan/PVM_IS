@@ -21,12 +21,10 @@ namespace IS_Turizmas.Controllers
     public class RoutesController : HomeController
     {
         private readonly ApplicationDbContext _context;
-        private readonly SignInManager<RegistruotiVartotojai> _signInManager;
 
-        public RoutesController(ApplicationDbContext context, SignInManager<RegistruotiVartotojai> signInManager):base(context)
+        public RoutesController(ApplicationDbContext context):base(context)
         {
             _context = context;
-            _signInManager = signInManager;
         }
 
 

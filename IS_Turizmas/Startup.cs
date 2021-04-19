@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using IS_Turizmas.Models;
-using IS_Turizmas.Identity;
+//using IS_Turizmas.Identity;
 using Microsoft.AspNetCore.Identity;
 using IS_Turizmas.SupportClasses;
 using Microsoft.AspNetCore.Authentication;
@@ -37,21 +37,21 @@ namespace IS_Turizmas
 
             services.AddDbContext<ApplicationDbContext>();
 
-            services.AddIdentity<RegistruotiVartotojai, VartotojoPlanai>(config =>
-            {
-                config.SignIn.RequireConfirmedEmail = false;
-                config.Password.RequireUppercase = false;
-                config.Password.RequireNonAlphanumeric = false;
-                config.Password.RequiredLength = 8;
-            }).AddDefaultTokenProviders().AddErrorDescriber<CustomIdentityErrorDescriber>();
+            //services.AddIdentity<RegistruotiVartotojai, VartotojoPlanai>(config =>
+            //{
+            //    config.SignIn.RequireConfirmedEmail = false;
+            //    config.Password.RequireUppercase = false;
+            //    config.Password.RequireNonAlphanumeric = false;
+            //    config.Password.RequiredLength = 8;
+            //}).AddDefaultTokenProviders().AddErrorDescriber<CustomIdentityErrorDescriber>();
 
-            services.AddTransient<IUserStore<RegistruotiVartotojai>, UserStore>();
+            //services.AddTransient<IUserStore<RegistruotiVartotojai>, UserStore>();
 
-            services.AddTransient<IRoleStore<VartotojoPlanai>, RoleStore>();
+            //services.AddTransient<IRoleStore<VartotojoPlanai>, RoleStore>();
 
             services.AddTransient<IClaimsTransformation, ClaimsTransformer>();
 
-            services.AddHostedService<AccountEmailService>();
+            //services.AddHostedService<AccountEmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
