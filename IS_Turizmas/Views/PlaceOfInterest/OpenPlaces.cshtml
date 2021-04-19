@@ -15,7 +15,7 @@
         {
             <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
         }
-        <a asp-action="CreatePlaceOfInterest" asp-controller="Routes">
+        <a asp-action="CreatePlaceOfInterest" asp-controller="PlaceOfInterest">
             Sukurti lankytiną objektą
         </a>
         @*@if (TempData["SuccessMessage"] != null)
@@ -59,10 +59,10 @@
                     <td>@String.Format("{0:N2}", @ViewBag.places[i].Bilieto_kaina) &#8364;</td>
                     <td>@ViewBag.places[i].Taskai</td>
                     <td>
-                        <a asp-action="TryDeletePlaceOfInterest" asp-controller="Routes" asp-route-id="@ViewBag.places[i].Id">
+                        <a asp-action="TryDeletePlaceOfInterest" asp-controller="PlaceOfInterest" asp-route-id="@ViewBag.places[i].Id">
                             Trinti
                         </a>
-                        <a asp-action="EditPlaceOfInterest" asp-controller="Routes" asp-route-id="@ViewBag.places[i].Id">
+                        <a asp-action="EditPlaceOfInterest" asp-controller="PlaceOfInterest" asp-route-id="@ViewBag.places[i].Id">
                             Redaguoti
                         </a>
                     </td>
@@ -72,27 +72,4 @@
         </table>
     </div>
 
-    <!--Delete confirmation window-->
-    <!--<div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog" aria-labelledby="Delete confirmation window" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteConfirmation">Šalinimo patvirtinimas</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Ar tikrai norite ištrinti maršrutą?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
-                    <form class="deleteForm" method="POST" asp-action="DeleteRoute">
-                        <input id="deleteID" name="id" type="hidden" value="" />
-                        <button type="submit" class="btn btn-danger" >Šalinti</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>-->
 }

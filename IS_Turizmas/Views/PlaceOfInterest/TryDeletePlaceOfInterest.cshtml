@@ -5,11 +5,11 @@
     ViewData["Title"] = "Patvirtinti trinimą";
     <div class="col-md-10 mx-auto text-center py-3 my-3">
         <h1>Ar tikrai naikinti?</h1>
-        <a asp-action="DeletePlaceOfInterest" asp-controller="Routes"
+        <a asp-action="DeletePlaceOfInterest" asp-controller="PlaceOfInterest"
            asp-route-id="@ViewBag.PlaceId" class="btn btn-success" role="button">
             Taip
         </a>
-        <a asp-action="Index" asp-controller="Routes" class="btn btn-danger" role="button">
+        <a asp-action="OpenPlaces" asp-controller="PlaceOfInterest" class="btn btn-danger" role="button">
             Ne
         </a>
     </div>

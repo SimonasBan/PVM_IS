@@ -18,7 +18,7 @@ namespace IS_Turizmas.Controllers
         public IActionResult MainIndex()
         {
             PlaceOfInterest place = _context.PlaceOfInterest.FirstOrDefault();
-            return View("~/Views/Home/Index.cshtml");
+            return View("~/Views/Home/MainPage.cshtml");
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
