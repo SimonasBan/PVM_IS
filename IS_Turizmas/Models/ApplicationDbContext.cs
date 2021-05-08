@@ -17,7 +17,14 @@ namespace IS_Turizmas.Models
         {
         }
 
+        /*
+         * Add created DB tables here
+         */
         public virtual DbSet<PlaceOfInterest> PlaceOfInterest { get; set; }
+        public virtual DbSet<ClientRoute> ClientRoute { get; set; }
+        public virtual DbSet<ClientRouteState> ClientRouteState { get; set; }
+        public virtual DbSet<Route> Route { get; set; }
+        public virtual DbSet<Route_PlaceOfInterest> Route_PlaceOfInterest { get; set; }
 
 
 
@@ -58,7 +65,132 @@ namespace IS_Turizmas.Models
                     .HasColumnName("Taskai")
                     .HasColumnType("int(11)");
             });
-            
+
+            modelBuilder.Entity<Route_PlaceOfInterest>(entity =>
+            {
+                entity.ToTable("Route_PlaceOfInterest");
+
+                entity.Property(e => e.Number)
+                    .HasColumnName("Number")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("Id")
+                    .HasColumnType("int(11)");
+
+                entity.HasIndex(e => e.Route_id)
+                    .HasName("Route_id");
+
+                entity.Property(e => e.Route_id)
+                    .HasColumnName("Route_id")
+                    .HasColumnType("int(11)");
+
+                entity.HasIndex(e => e.PlaceOfInterest_id)
+                    .HasName("PlaceOfInterest_id");
+                
+
+                entity.Property(e => e.PlaceOfInterest_id)
+                    .HasColumnName("PlaceOfInterest_id")
+                    .HasColumnType("int(11)");
+
+                entity.HasOne(d => d.Route_idNavigation)
+                    .WithMany(p => p.Route_PlaceOfInterest)
+                    .HasForeignKey(d => d.Route_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Route_id");
+
+                entity.HasOne(d => d.PlaceOfInterest_idNavigation)
+                    .WithMany(p => p.Route_PlaceOfInterest)
+                    .HasForeignKey(d => d.PlaceOfInterest_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PlaceOfInterest_id");
+
+            });
+
+            modelBuilder.Entity<Route>(entity =>
+            {
+                entity.ToTable("Route");
+
+
+
+                entity.Property(e => e.Length)
+                    .HasColumnName("Length")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("Name")
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Description)
+                    .HasColumnName("Description")
+                    .HasMaxLength(5000);
+
+                entity.Property(e => e.Rating)
+                    .HasColumnName("Rating");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("Id")
+                    .HasColumnType("int(11)");
+
+            });
+
+
+            modelBuilder.Entity<ClientRoute>(entity =>
+            {
+                entity.ToTable("ClientRoute");
+
+                entity.Property(e => e.Start_date)
+                    .HasColumnName("Start_date")
+                    .HasColumnType("date");
+
+                entity.Property(e => e.Finish_date)
+                    .HasColumnName("Finish_date")
+                    .HasColumnType("date");
+
+                entity.HasIndex(e => e.Route_id)
+                    .HasName("Route_id");
+
+                entity.Property(e => e.Route_id)
+                    .HasColumnName("Route_id")
+                    .HasColumnType("int(11)");
+
+                entity.HasOne(d => d.Route_idNavigation)
+                    .WithMany(p => p.ClientRoute)
+                    .HasForeignKey(d => d.Route_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Route_id");
+
+                entity.Property(e => e.State_Id)
+                    .HasColumnName("State_Id")
+                    .HasColumnType("int(11)");
+
+                entity.HasIndex(e => e.State_Id)
+                    .HasName("State_Id");
+
+                entity.HasOne(d => d.State_IdNavigation)
+                    .WithMany(p => p.ClientRoute)
+                    .HasForeignKey(d => d.State_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("State_Id");
+
+                entity.Property(e => e.Calendar_date)
+                    .HasColumnName("Calendar_date")
+                    .HasColumnType("date");
+
+                //entity.Property(e => e.Client_id)
+                //    .HasColumnName("Client_id")
+                //    .HasColumnType("int(11)");
+
+                //entity.HasIndex(e => e.Client_id)
+                //    .HasName("Client_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("Id")
+                    .HasColumnType("int(11)");
+                
+
+            });
+
 
             OnModelCreatingPartial(modelBuilder);
         }
