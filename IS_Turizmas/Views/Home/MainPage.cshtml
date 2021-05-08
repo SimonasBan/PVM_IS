@@ -14,24 +14,16 @@
     <div class="row mx-auto my-5">
         <div class="col-md-10 mx-auto">
             <div class="row text-center">
-                @*<div class="intro-card col-md-4">
-                    <a asp-controller="Content" asp-action="ViewAllRoutes">
-                    <img class="intro-logo img-thumbnail border rounded-circle" src="~/images/Home/destination.png"/>
-                    <p class="my-2">Rask naujus kelionių maršrutus</p>
-                    </a>
-                </div>*@
                 <div class="intro-card col-md-4">
                     <a asp-controller="PlaceOfInterest" asp-action="OpenPlaces">
-                    @*<img class="intro-logo img-thumbnail border rounded-circle" src="~/images/Home/suitcases.png" />*@
-                    <p class="my-2">Peržiūrėti objektus</p>
+                        <p class="my-2">Peržiūrėti objektus</p>
                     </a>
                 </div>
-                <di@*v class="intro-card col-md-4">
-                    <a asp-controller="Content" asp-action="ViewAllRouteAnalysis">
-                    <img class="intro-logo border rounded-circle" src="~/images/Home/statistics.png" />
-                    <p class="my-2">Atrask įdomiausią informaciją apie kelionių kryptis</p>
+                <div class="intro-card col-md-4">
+                    <a asp-controller="PersonalRoutes" asp-action="OpenFavouriteRoutes">
+                        <p class="my-2">Peržiūrėti mėgstamiausius maršrutus</p>
                     </a>
-                </d*@iv>
+                </div>
             </div>
         </div>
     </div>
