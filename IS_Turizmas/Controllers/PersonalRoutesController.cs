@@ -29,57 +29,128 @@ namespace IS_Turizmas.Controllers
         public async Task<IActionResult> OpenFavouriteRoutes()
         {
             //ViewBag.places = _context.PlaceOfInterest.ToList();
+            
             return View();
         }
 
-        public async Task<IActionResult> GetWeatherForecastByDate(string latitude, string longtitude)
+        public async Task<IActionResult> SubmitRouteInfo(int clientRouteId)
         {
-            /*TO DO
-             * Get all routes places and get a forecast
-              for each place 
-            -------
-             set variable to get weather for specific clientRoute Id
-             */
-            var currClientRouteId = 1;
+            bool forecastRes = await GetWeatherForecastByDate(clientRouteId);
 
-            //var currRoute = _context.Route_PlaceOfInterest.ToArray();
+            return RedirectToAction("OpenFavouriteRoutes");
+        }
+
+        /*
+         * True if everything worked correctly.
+         * False if anything failed.
+         */
+        public async Task<bool> GetWeatherForecastByDate(int clientRouteId)
+        {
+            var currClientRoute = _context.ClientRoute.Find(clientRouteId);
 
             var currRoute = _context.ClientRoute
                 .Include(o => o.Route_idNavigation)
-                .Where(o => o.Id == currClientRouteId)
+                .Where(o => o.Id == clientRouteId)
                 .Select(o => o.Route_idNavigation)
                 .FirstOrDefault();
 
-            var currPlaces = _context.Route_PlaceOfInterest
+            var routePlacesCoords = _context.Route_PlaceOfInterest
                 .Include(o => o.Route_idNavigation)
                 .Include(o => o.PlaceOfInterest_idNavigation)
                 .Where(o => o.Route_idNavigation.Id == currRoute.Id)
                 .Select(o => o.PlaceOfInterest_idNavigation.Koordinates).ToArray();
 
+            bool needsUmbrella = false;
+
+            //--------For first place object--------
+            var firstPlaceCoords = routePlacesCoords[0].Split(',');
+            var firstLat = firstPlaceCoords[0];
+            var firstLong = firstPlaceCoords[1];
+
+            JObject firstPlaceForecast = new ClientController(_context).GetPlaceForecast(firstLat, firstLong).Result;
+
+            //Checks if it's possible to get weather forecast for the required calendar date
+            var lastDate = (string)firstPlaceForecast["list"][39]["dt_txt"];
+            DateTime lastDateTime = DateTime.Parse(lastDate.Split(' ')[0]);
+            if (lastDateTime < currClientRoute.Calendar_date)
+            {
+                TempData["ErrorMessage"] = "Nepavyko gauti orų. Per tolima data.";
+                return false;
+                //return RedirectToAction("OpenFavouriteRoutes");
+            }
+
+            var firstForecastList = firstPlaceForecast["list"]
+                .Select(o =>
+                {
+                    if (DateTime.Parse((string)o["dt_txt"]).DayOfYear == currClientRoute.Calendar_date.Value.DayOfYear)
+                    {
+                        return o;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    
+                })
+                .Where(jo => jo != null)
+                .ToList();
+
+            firstForecastList[0]["weather"][0]["main"] = "rain";
 
 
+            if (firstForecastList.Any(o => (string)o["weather"][0]["main"] == "rain"))
+            {
+                needsUmbrella = true;
+            }
 
-            //var places = _context.Route_PlaceOfInterest
-            //    .Include(o => o.PlaceOfInterest_idNavigation)
-            //    .Include(o => o.Route_idNavigation)
-            //    .Where(o => o.)
-            //.Include(o => o.RouteNavigation).Include(o => o.)   .MarsrutoObjektai.Include(o => o.FkLankytinasObjektasNavigation)
-            //    .Where(o => o.FkMarsrutas == id).OrderBy(o => o.EilesNr).Select(o => o.FkLankytinasObjektasNavigation.Pavadinimas).ToArray();
+            //----others----
+            foreach (var place in routePlacesCoords.Skip(1))
+            {
+                var tempCoords = place.Split(',');
+                var tempLat = tempCoords[0];
+                var tempLong = tempCoords[1];
 
-            //var p = _context.MarsrutoObjektai.Include(o => o.FkLankytinasObjektasNavigation)
-            //    .Where(o => o.FkMarsrutas == id).OrderBy(o => o.EilesNr).Select(o => o.FkLankytinasObjektasNavigation.Pavadinimas).ToArray();
 
-            var a = latitude;
+                JObject tempPlaceForecast = new ClientController(_context).GetPlaceForecast(tempLat, tempLong).Result;
 
-            JObject forecast = new ClientController(_context).GetPlaceForecast(latitude, longtitude).Result;
+                var tempForecastList = tempPlaceForecast["list"]
+                    .Select(o =>
+                    {
+                        if (DateTime.Parse((string)o["dt_txt"]).DayOfYear == currClientRoute.Calendar_date.Value.DayOfYear)
+                        {
+                            return o;
+                        }
+                        else
+                        {
+                            return null;
+                        }
 
-            var f = (string)forecast["list"][0]["weather"][0]["main"];
+                    })
+                    .Where(jo => jo != null)
+                    .ToList();
 
-            /*TO DO
-             * Update weather forecast in ClientRoute entity*/
 
-            TempData["SuccessMessage"] = "Orai: " + f;
-            return RedirectToAction("OpenFavouriteRoutes");
+                if (tempForecastList.Any(o => (string)o["weather"][0]["main"] == "rain"))
+                {
+                    needsUmbrella = true;
+                }
+            }
+
+            if (needsUmbrella)
+            {
+                currClientRoute.Item_id = 1;
+                try
+                {
+                    _context.Update(currClientRoute);
+                    await _context.SaveChangesAsync();                    
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return false;
+                    throw;
+                }
+            }
+            return true;
         }
     }
 }
