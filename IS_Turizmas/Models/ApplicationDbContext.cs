@@ -154,11 +154,24 @@ namespace IS_Turizmas.Models
                     .HasColumnName("Route_id")
                     .HasColumnType("int(11)");
 
+                entity.HasIndex(e => e.Item_id)
+                    .HasName("Item_id");
+
+                entity.Property(e => e.Item_id)
+                    .HasColumnName("Item_id")
+                    .HasColumnType("int(11)");
+
                 entity.HasOne(d => d.Route_idNavigation)
                     .WithMany(p => p.ClientRoute)
                     .HasForeignKey(d => d.Route_id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Route_id");
+
+                entity.HasOne(d => d.Item_idNavigation)
+                    .WithMany(p => p.ClientRoute)
+                    .HasForeignKey(d => d.Item_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Item_id");
 
                 entity.Property(e => e.State_Id)
                     .HasColumnName("State_Id")
@@ -190,6 +203,21 @@ namespace IS_Turizmas.Models
                 
 
             });
+
+            modelBuilder.Entity<PersonalRouteItem>(entity =>
+            {
+                entity.ToTable("PersonalRouteItem");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Item)
+                    .IsRequired()
+                    .HasColumnName("Item")
+                    .HasMaxLength(255);
+            });
+
 
 
             OnModelCreatingPartial(modelBuilder);

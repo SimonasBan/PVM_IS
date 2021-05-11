@@ -39,7 +39,7 @@ namespace IS_Turizmas.Controllers
             //}
             //int id = int.Parse(userId);
             //return View(await _context.Marsrutai.Include(o => o.MarsrutoObjektai).Where(o => o.FkRegistruotasVartotojas == id).ToListAsync());
-
+            ViewBag.a = "aa";
             ViewBag.places = _context.PlaceOfInterest.ToList();
             return View();
         }
@@ -62,7 +62,7 @@ namespace IS_Turizmas.Controllers
                 TempData["ErrorMessage"] = "Neužpildėte visų laukų";
                 return RedirectToAction("CreatePlaceOfInterest");
             }
-
+            
             try
             {
                 _context.PlaceOfInterest.Add(place);

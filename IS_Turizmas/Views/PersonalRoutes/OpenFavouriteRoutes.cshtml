@@ -16,34 +16,16 @@
         <div class="col-md-10 mx-auto">
             <div class="row text-center">
                 <div class="intro-card col-md-4">
-                    <form asp-controller="PersonalRoutes" asp-action="GetWeatherForecastByDate" method="POST">
-                        <input type="hidden" class="form-control" id="latitudeValue" name="latitude">
-                        <input type="hidden" class="form-control" id="longtitudeValue" name="longtitude">
+                    @*Requires further development*@
+                    <form asp-controller="PersonalRoutes" asp-action="SubmitRouteInfo" method="POST">
+                        @* This input is just for testing and has to be adapted *@
+                        <input type="hidden" class="form-control" name="clientRouteId" value="1">
                         <div>
-                            <button type="submit" class="btn btn-primary">Gauti orų prognozę pagal laiką</button>
+                            <button type="submit" class="btn btn-primary">Submit info</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        var latInp = document.getElementById("latitudeValue");
-        var lonInp = document.getElementById("longtitudeValue");
-
-        //function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
-            }
-        //}
-
-        //http://api.openweathermap.org/data/2.5/weather?lat=54.926220099999995&lon=23.6664645&appid=c5f241ad2670a83cc3b38551c15cbd4f
-
-        //http://api.openweathermap.org/data/2.5/forecast?lat=54.926220099999995&lon=23.6664645&appid=c5f241ad2670a83cc3b38551c15cbd4f - gets 5 days forecast
-
-        function showPosition(position) {
-            latInp.value = position.coords.latitude;
-            lonInp.value = position.coords.longitude;            
-        }
-    </script>
 }
