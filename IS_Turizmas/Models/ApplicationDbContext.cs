@@ -25,6 +25,10 @@ namespace IS_Turizmas.Models
         public virtual DbSet<ClientRouteState> ClientRouteState { get; set; }
         public virtual DbSet<Route> Route { get; set; }
         public virtual DbSet<Route_PlaceOfInterest> Route_PlaceOfInterest { get; set; }
+        public virtual DbSet<OrientationGame> OrientationGame { get; set; }
+        public virtual DbSet<Riddle> Riddle { get; set; }
+        public virtual DbSet<ClientOrientationGame> ClientOrientationGame { get; set; }
+        public virtual DbSet<OrientationGame_Riddle> OrientationGame_Riddle { get; set; }
 
 
 
@@ -200,7 +204,11 @@ namespace IS_Turizmas.Models
                 entity.Property(e => e.Id)
                     .HasColumnName("Id")
                     .HasColumnType("int(11)");
-                
+
+                entity.Property(e => e.CurrentNumber)
+                    .HasColumnName("CurrentNumber")
+                    .HasColumnType("int(11)");
+
 
             });
 
@@ -218,6 +226,140 @@ namespace IS_Turizmas.Models
                     .HasMaxLength(255);
             });
 
+            modelBuilder.Entity<Riddle>(entity =>
+            {
+                entity.ToTable("Riddle");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("Id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.RiddleQuestion)
+                    .HasColumnName("RiddleQuestion")
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Answer)
+                    .HasColumnName("Answer")
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.PlaceCode)
+                    .HasColumnName("PlaceCode")
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.PlaceCodeAnswer)
+                    .HasColumnName("PlaceCodeAnswer")
+                    .HasMaxLength(255);
+
+
+                entity.HasIndex(e => e.PlaceOfInterest_Id)
+                    .HasName("PlaceOfInterest_Id");
+
+
+                entity.Property(e => e.PlaceOfInterest_Id)
+                    .HasColumnName("PlaceOfInterest_Id")
+                    .HasColumnType("int(11)");
+
+
+                entity.HasOne(d => d.PlaceOfInterest_IdNavigation)
+                    .WithMany(p => p.Riddle)
+                    .HasForeignKey(d => d.PlaceOfInterest_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PlaceOfInterest_Id");
+
+            });
+
+            modelBuilder.Entity<OrientationGame>(entity =>
+            {
+                entity.ToTable("OrientationGame");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("Id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Title)
+                    .HasColumnName("Title")
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasColumnName("Description")
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Points_For_Completion)
+                    .HasColumnName("Points_For_Completion")
+                    .HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<OrientationGame_Riddle>(entity =>
+            {
+                entity.ToTable("OrientationGame_Riddle");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("Id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Number)
+                    .HasColumnName("Number")
+                    .HasColumnType("int(11)");
+
+                entity.HasIndex(e => e.Riddle_Id)
+                    .HasName("Route_Id");
+
+                entity.Property(e => e.Riddle_Id)
+                    .HasColumnName("Riddle_Id")
+                    .HasColumnType("int(11)");
+
+                entity.HasIndex(e => e.OrientationGame_Id)
+                    .HasName("OrientationGame_Id");
+
+
+                entity.Property(e => e.OrientationGame_Id)
+                    .HasColumnName("OrientationGame_Id")
+                    .HasColumnType("int(11)");
+
+                entity.HasOne(d => d.Riddle_IdNavigation)
+                    .WithMany(p => p.OrientationGame_Riddle)
+                    .HasForeignKey(d => d.Riddle_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Riddle_Id");
+
+                entity.HasOne(d => d.OrientationGame_IdNavigation)
+                    .WithMany(p => p.OrientationGame_Riddle)
+                    .HasForeignKey(d => d.OrientationGame_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("OrientationGame_Id");
+            });
+
+            modelBuilder.Entity<ClientOrientationGame>(entity =>
+            {
+                entity.ToTable("ClientOrientationGame");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("Id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.State)
+                    .HasColumnName("State")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.CurrentNumber)
+                    .HasColumnName("CurrentNumber")
+                    .HasColumnType("int(11)");
+
+                entity.HasIndex(e => e.OrientationGame_Id)
+                    .HasName("OrientationGame_Id");
+
+
+                entity.Property(e => e.OrientationGame_Id)
+                    .HasColumnName("OrientationGame_Id")
+                    .HasColumnType("int(11)");
+
+                entity.HasOne(d => d.OrientationGame_IdNavigation)
+                    .WithMany(p => p.ClientOrientationGame)
+                    .HasForeignKey(d => d.OrientationGame_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("OrientationGame_Id");
+            });
 
 
             OnModelCreatingPartial(modelBuilder);

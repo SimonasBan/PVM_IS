@@ -1,0 +1,41 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using IS_Turizmas.Models
+@*@model List<IS_Turizmas.Models.PlaceOfInterest>*@
+@{
+    ViewData["Title"] = "Lankytini objektai";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>PlaceOfInterestView id: @TempData["IDTEST"]</h1>
+        @*@if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+            <a asp-action="CreatePlaceOfInterest" asp-controller="PlaceOfInterest">
+                Sukurti lankytiną objektą
+            </a>*@
+        @*@if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }*@
+
+    </div>
+
+    <div class="col-md-10 mx-auto">
+        <p class="text-center">Kita stotele: @ViewBag.place.Pavadinimas</p>
+        <p class="text-center">Adresas: @ViewBag.place.Miestas, @ViewBag.place.Adresas</p>
+        @if (ViewBag.place.Bilieto_kaina != 0)
+        {
+            <p class="text-center">Kaina: @ViewBag.place.Bilieto_kaina</p>
+        }
+        <a asp-action="ApproveVisit" asp-controller="PersonalRoutes"
+           asp-route-id="@ViewBag.Id" class="btn btn-success" role="button">
+            Tvirtinti vizitą
+        </a>
+    </div>
+
+}

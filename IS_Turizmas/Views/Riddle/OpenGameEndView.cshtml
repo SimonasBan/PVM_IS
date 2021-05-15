@@ -1,0 +1,14 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using IS_Turizmas.Models
+@*@model List<IS_Turizmas.Models.PlaceOfInterest>*@
+@{
+    ViewData["Title"] = "Lankytini objektai";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>U win, sveikinam chebrantas, gavai @ViewBag.Points tasku</h1>
+        <a asp-action="OpenOrientationGames" asp-controller="Riddle">
+            Grįžti atgal
+        </a>
+    </div>
+}

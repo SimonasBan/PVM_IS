@@ -25,11 +25,40 @@ namespace IS_Turizmas.Controllers
         {
             _context = context;
         }
-
+        public class ClientRoute_Route
+        {
+            public int ClientRoute_Id { get; set; }
+            public int? Length { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public double? Rating { get; set; }
+            public string Start_date { get; set; }
+            public string Finish_date { get; set; }
+            public int CurrentNumber { get; set; }
+        }
         public async Task<IActionResult> OpenFavouriteRoutes()
         {
             //ViewBag.places = _context.PlaceOfInterest.ToList();
-            
+            //var clientRoutes = _context.ClientRoute.ToList();
+            //ViewBag.clientRoutes = clientRoutes;
+            //var routeData = new List<ClientRoute_Route>();
+
+            var clientRoutesWithRoutes =
+                from cRoute in _context.ClientRoute
+                join route in _context.Route on cRoute.Route_id equals route.Id
+                select new ClientRoute_Route
+                {
+                    ClientRoute_Id = cRoute.Id,
+                    Length = route.Length,
+                    Name = route.Name,
+                    Description = route.Description,
+                    Rating = Math.Round((double)route.Rating, 2),
+                    Start_date = cRoute.Start_date.ToString(),
+                    Finish_date = cRoute.Finish_date.ToString(),
+                    CurrentNumber = cRoute.CurrentNumber
+                };
+            var clientRoutesList = clientRoutesWithRoutes.ToList();
+            ViewBag.clientRoutes = clientRoutesList;
             return View();
         }
 
@@ -39,7 +68,83 @@ namespace IS_Turizmas.Controllers
 
             return RedirectToAction("OpenFavouriteRoutes");
         }
+        public async Task<IActionResult> StartRoute(int id)
+        {
+            ClientRoute clientRoute = _context.ClientRoute.Find(id);
+            clientRoute.State_Id = 2;
+            try
+            {
+                _context.ClientRoute.Update(clientRoute);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+                throw;
+            }
+            return RedirectToAction("PlaceOfInterestView", new { id = id });
+        }
+        public async Task<IActionResult> ContinueRoute(int id)
+        {
+            return RedirectToAction("PlaceOfInterestView", new { id = id });
+        }
+        public async Task<IActionResult> PlaceOfInterestView(int id)
+        {
+            var clientRoute = _context.ClientRoute.Find(id);
+            var route = _context.Route.Find(clientRoute.Route_id);
+            var route_place = _context.Route_PlaceOfInterest
+                .Where(p => p.Route_id == route.Id)
+                .Where(p => p.Number == clientRoute.CurrentNumber).FirstOrDefault();
+            var place = _context.PlaceOfInterest.Find(route_place.PlaceOfInterest_id);
 
+            ViewBag.place = place;
+            ViewBag.route = route;
+            ViewBag.Id = id;
+            //var currClientRoute = _context.ClientRoute.Find(id);
+            //var currRoute = _context.Route.Find(currClientRoute.Route_id);
+
+            //var ClientOrienGame = _context.ClientOrientationGame.Find(id);
+
+            //ViewBag.clientGame = ClientOrienGame.OrientationGame_Id;
+            //var OrienRiddle = _context.OrientationGame_Riddle
+            //    .Where(p => p.OrientationGame_Id == ClientOrienGame.OrientationGame_Id)
+            //    .Where(p => p.Number == ClientOrienGame.CurrentNumber).FirstOrDefault();
+
+            //var Riddle = _context.Riddle.Find(OrienRiddle.Riddle_Id);
+
+            //var Place = _context.PlaceOfInterest.Find(Riddle.PlaceOfInterest_Id);
+
+            //ViewBag.id = id;
+            //ViewBag.Riddle = Riddle;
+            //ViewBag.Place = Place;
+            //return View();
+            return View();
+        }
+        public async Task<IActionResult> ApproveVisit(int id)
+        {
+            var clientRoute = _context.ClientRoute.Find(id);
+            clientRoute.CurrentNumber += 1;
+
+            var nextPlace = _context.Route_PlaceOfInterest
+                .Where(p => p.Route_id == clientRoute.Route_id)
+                .Where(p => clientRoute.CurrentNumber == p.Number).FirstOrDefault();
+
+            if (nextPlace == null)
+            {
+                return RedirectToAction("OpenFavouriteRoutes");
+            }
+            try
+            {
+                _context.ClientRoute.Update(clientRoute);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+                throw;
+            }
+            return RedirectToAction("PlaceOfInterestView", new { id = id });
+        }
         /*
          * True if everything worked correctly.
          * False if anything failed.
