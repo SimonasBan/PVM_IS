@@ -43,6 +43,17 @@ namespace IS_Turizmas.Controllers
             ViewBag.places = _context.PlaceOfInterest.ToList();
             return View();
         }
+        public async Task<IActionResult> OpenAllPlaces()
+        {
+            ViewBag.places = GetPlaces();
+            return View("PlacesOfInterestView");
+        }
+
+        public async Task<IActionResult> OpenPlaceRating(int id)
+        {
+            ViewBag.id = id;
+            return View("RatePlaceOfInterestView");
+        }
 
         public async Task<IActionResult> CreatePlaceOfInterest()
         {
@@ -74,11 +85,36 @@ namespace IS_Turizmas.Controllers
                 throw;
             }
 
-            TempData["SuccessMessage"] = "Objektas užsaugotas";
+            TempData["SuccessMessage"] = "Objektas išsaugotas";
             return RedirectToAction("OpenPlaces");
         }
 
-        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveRating(int id, [Bind("Comment, Rating")] PlaceOfInterestComment evaluation)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Neužpildėte visų laukų";
+                return RedirectToAction("OpenPlaceRating", new { id = id });
+            }
+
+            try
+            {
+                evaluation.PlaceOfInterest_Id = id;
+                _context.PlaceOfInterestComment.Add(evaluation);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+                throw;
+            }
+
+            TempData["SuccessMessage"] = "Vertinimas išsaugotas";
+            return RedirectToAction("OpenAllPlaces");
+        }
 
         public async Task<IActionResult> EditPlaceOfInterest(int id)
         {
@@ -149,7 +185,10 @@ namespace IS_Turizmas.Controllers
             return RedirectToAction("OpenPlaces");
         }
 
-        
+        private List<PlaceOfInterest> GetPlaces()
+        {
+            return _context.PlaceOfInterest.ToList();
+        }
 
     }
 }
