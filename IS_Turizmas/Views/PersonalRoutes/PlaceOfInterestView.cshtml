@@ -6,22 +6,15 @@
 @{
     ViewData["Title"] = "Lankytini objektai";
     <div class="col-md-10 mx-auto text-center py-3 my-3">
-        <h1>PlaceOfInterestView id: @TempData["IDTEST"]</h1>
-        @*@if (TempData["SuccessMessage"] != null)
-            {
-                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-            }
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-            }
-            <a asp-action="CreatePlaceOfInterest" asp-controller="PlaceOfInterest">
-                Sukurti lankytiną objektą
-            </a>*@
-        @*@if (TempData["SuccessMessage"] != null)
-            {
-                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-            }*@
+        <h1>PlaceOfInterestView]</h1>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
 
     </div>
 
