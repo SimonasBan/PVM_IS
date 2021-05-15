@@ -34,7 +34,7 @@ namespace IS_Turizmas.Controllers
             public double? Rating { get; set; }
             public string Start_date { get; set; }
             public string Finish_date { get; set; }
-            public int CurrentNumber { get; set; }
+            public int State_Id { get; set; }
         }
         public async Task<IActionResult> OpenFavouriteRoutes()
         {
@@ -55,7 +55,7 @@ namespace IS_Turizmas.Controllers
                     Rating = Math.Round((double)route.Rating, 2),
                     Start_date = cRoute.Start_date.ToString(),
                     Finish_date = cRoute.Finish_date.ToString(),
-                    CurrentNumber = cRoute.CurrentNumber
+                    State_Id = cRoute.State_Id
                 };
             var clientRoutesList = clientRoutesWithRoutes.ToList();
             ViewBag.clientRoutes = clientRoutesList;

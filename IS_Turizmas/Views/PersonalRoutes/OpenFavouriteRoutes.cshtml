@@ -27,6 +27,8 @@
             <tbody>
                 @for (var i = 0; i < ViewBag.clientRoutes.Count; i++)
                 {
+                    if (ViewBag.clientRoutes[i].State_Id == 4)
+                        continue;
                 <tr>
                     <th>@(i + 1)</th>
                     <td>@ViewBag.clientRoutes[i].Name</td>
@@ -34,11 +36,31 @@
                     <td>@ViewBag.clientRoutes[i].Rating </td>
                     <td>@ViewBag.clientRoutes[i].Start_date</td>
                     <td>@ViewBag.clientRoutes[i].Finish_date</td>
-                    <td>
-                        <a asp-action="StartRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                            Pradėti
-                        </a>
-                    </td>
+                    @if (ViewBag.clientRoutes[i].State_Id == 1)
+                    {
+                        <td>
+                            <a asp-action="StartRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                Pradėti
+                            </a>
+                        </td>
+                    }
+                    else if (ViewBag.clientRoutes[i].State_Id == 2)
+                    {
+                        <td>
+                            <a asp-action="ContinueRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                Tęsti
+                            </a>
+                        </td>
+                    }
+                    else if (ViewBag.clientRoutes[i].State_Id == 3)
+                    {
+                        <td>
+                            <a>
+                                Pabaigta
+                            </a>
+                        </td>
+                    }
+
                 </tr>
                 }
             </tbody>
