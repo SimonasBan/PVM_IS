@@ -21,6 +21,7 @@ namespace IS_Turizmas.Models
          * Add created DB tables here
          */
         public virtual DbSet<PlaceOfInterest> PlaceOfInterest { get; set; }
+        public virtual DbSet<PlaceOfInterestComment> PlaceOfInterestComment { get; set; }
         public virtual DbSet<ClientRoute> ClientRoute { get; set; }
         public virtual DbSet<ClientRouteState> ClientRouteState { get; set; }
         public virtual DbSet<Route> Route { get; set; }
@@ -224,6 +225,24 @@ namespace IS_Turizmas.Models
                     .IsRequired()
                     .HasColumnName("Item")
                     .HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<PlaceOfInterestComment>(entity =>
+            {
+                entity.ToTable("PlaceOfInterestComment");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("Id")
+                    .HasColumnType("int(11)");
+                entity.Property(e => e.Comment)
+                    .HasColumnName("Comment")
+                    .HasMaxLength(255);
+                entity.Property(e => e.Rating)
+                    .HasColumnName("Rating")
+                    .HasColumnType("int(11)");
+                entity.Property(e => e.PlaceOfInterest_Id)
+                    .HasColumnName("PlaceOfInterest_Id")
+                    .HasColumnType("int(11)");
             });
 
             modelBuilder.Entity<Riddle>(entity =>

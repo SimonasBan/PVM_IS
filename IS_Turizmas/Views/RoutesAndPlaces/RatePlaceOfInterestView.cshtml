@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using IS_Turizmas.Models
+@model IS_Turizmas.Models.PlaceOfInterestComment
+@{
+    <script>
+        document.getElementById("description-text").value += 'Test Feedback';
+    </script>
+    ViewData["Title"] = "Vertinti lankytiną objektą";
+    <div class="container-fluid">
+        <div class="col-md-10 mx-auto text-center py-3 my-3">
+            <h4>Vertinti lankytiną objektą</h4>
+        </div>
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <form asp-controller="RoutesAndPlaces" asp-action="SaveRating" asp-route-id="@ViewBag.id" method="POST">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <label><strong>Vertinimas</strong></label>
+                <div class="input-group mb-3">
+
+                    <select class="custom-select" asp-for="Rating" id="Rating">
+                        <option selected>Pasirinkite</option>
+                        <option value=10>10</option>
+                        <option value=9>9</option>
+                        <option value=8>8</option>
+                        <option value=7>7</option>
+                        <option value=6>6</option>
+                        <option value=5>5</option>
+                        <option value=4>4</option>
+                        <option value=3>3</option>
+                        <option value=2>2</option>
+                        <option value=1>1</option>
+                    </select>
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <label><strong>Komentaras</strong></label>
+                        <textarea asp-for="Comment" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Įrašykite komentarą!"></textarea>
+                        <span asp-validation-for="Comment" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"> Vertinti</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+        <br>
+    </div>
+}

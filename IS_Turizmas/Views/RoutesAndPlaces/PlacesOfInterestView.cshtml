@@ -1,0 +1,69 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using IS_Turizmas.Models
+@*@model List<IS_Turizmas.Models.PlaceOfInterest>*@
+@{
+    ViewData["Title"] = "Lankytini objektai";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>Lankytini objektai</h1>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+        @*@if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }*@
+    </div>
+    @*<div class="col-md-10 mx-auto">
+            <div class="row">
+            <div class="col-md-6"><a asp-action="CreateRouteDescription">Kurti naują maršrutą</a></div>
+            <div class="col-md-6 text-md-right"><a asp-action="CalculateRouteUniqueness">Apskaičiuoti maršruto unikalumo indeksą</a></div>
+            </div>
+        </div>*@
+    <div class="col-md-10 mx-auto">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pavadinimas</th>
+                    <th scope="col">Aprašymas</th>
+                    <th scope="col">Miestas</th>
+                    <th scope="col">Adresas</th>
+                    <th scope="col">Savivaldybė</th>
+                    <th scope="col">Koordinatės</th>
+                    <th scope="col">Bilieto kaina</th>
+                    <th scope="col">Taškai</th>
+                    <th scope="col">Veiksmai</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < ViewBag.places.Count; i++)
+                {
+                    <tr>
+                        <th>@(i + 1)</th>
+                        <td>@ViewBag.places[i].Pavadinimas</td>
+                        <td>@ViewBag.places[i].Aprasymas</td>
+                        <td>@ViewBag.places[i].Miestas</td>
+                        <td>@ViewBag.places[i].Adresas</td>
+                        <td>@ViewBag.places[i].Savivaldybe</td>
+                        <td>@ViewBag.places[i].Koordinates</td>
+                        <td>@String.Format("{0:N2}", @ViewBag.places[i].Bilieto_kaina) &#8364;</td>
+                        <td>@ViewBag.places[i].Taskai</td>
+                        <td>
+                            <a asp-action="OpenPlaceRating" asp-controller="RoutesAndPlaces" asp-route-id="@ViewBag.places[i].Id">
+                                Vertinti
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+}
