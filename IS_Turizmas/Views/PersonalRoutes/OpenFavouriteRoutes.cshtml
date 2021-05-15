@@ -13,6 +13,58 @@
         }
     </div>
     <div class="col-md-10 mx-auto">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pavadinimas</th>
+                    <th scope="col">Atstumas</th>
+                    <th scope="col">Reitingas</th>
+                    <th scope="col">Pradzios data</th>
+                    <th scope="col">Pabaigos data</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < ViewBag.clientRoutes.Count; i++)
+                {
+                    if (ViewBag.clientRoutes[i].State_Id == 4)
+                        continue;
+                <tr>
+                    <th>@(i + 1)</th>
+                    <td>@ViewBag.clientRoutes[i].Name</td>
+                    <td>@ViewBag.clientRoutes[i].Length km</td>
+                    <td>@ViewBag.clientRoutes[i].Rating </td>
+                    <td>@ViewBag.clientRoutes[i].Start_date</td>
+                    <td>@ViewBag.clientRoutes[i].Finish_date</td>
+                    @if (ViewBag.clientRoutes[i].State_Id == 1)
+                    {
+                        <td>
+                            <a asp-action="StartRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                Pradėti
+                            </a>
+                        </td>
+                    }
+                    else if (ViewBag.clientRoutes[i].State_Id == 2)
+                    {
+                        <td>
+                            <a asp-action="ContinueRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                Tęsti
+                            </a>
+                        </td>
+                    }
+                    else if (ViewBag.clientRoutes[i].State_Id == 3)
+                    {
+                        <td>
+                            <a>
+                                Pabaigta
+                            </a>
+                        </td>
+                    }
+
+                </tr>
+                }
+            </tbody>
+        </table>
         <div class="col-md-10 mx-auto">
             <div class="row text-center">
                 <div class="intro-card col-md-4">

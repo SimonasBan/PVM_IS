@@ -1,0 +1,78 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using IS_Turizmas.Models
+@*@model List<IS_Turizmas.Models.PlaceOfInterest>*@
+@{
+    ViewData["Title"] = "Lankytini objektai";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>OpenOrientationGames</h1>
+        @*@if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+        <a asp-action="CreatePlaceOfInterest" asp-controller="PlaceOfInterest">
+            Sukurti lankytiną objektą
+        </a>*@
+        @*@if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }*@
+    </div>
+    @*<div class="col-md-10 mx-auto">
+            <div class="row">
+            <div class="col-md-6"><a asp-action="CreateRouteDescription">Kurti naują maršrutą</a></div>
+            <div class="col-md-6 text-md-right"><a asp-action="CalculateRouteUniqueness">Apskaičiuoti maršruto unikalumo indeksą</a></div>
+            </div>
+        </div>*@
+    <div class="col-md-10 mx-auto">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">laukas1</th>
+                    <th scope="col">laukas2</th>
+                    <th scope="col">laukas3</th>
+                </tr>                
+            </thead>
+            <tbody>
+                @for (var i = 0; i < ViewBag.games.Count; i++)
+                {
+                <tr>
+                    <th>@(i + 1)</th>
+                    <td>@ViewBag.games[i].Title</td>
+                    <td>@ViewBag.games[i].Description</td>
+                    <td>@ViewBag.games[i].Points_For_Completion</td>
+                    @if (ViewBag.states[i] == 1)
+                    {
+                    <td>
+                        <a asp-action="StartGame" asp-controller="Riddle" asp-route-id="@ViewBag.games[i].Id">
+                            Žaisti
+                        </a>
+                    </td>
+                    }
+                    else if (ViewBag.states[i] == 2)
+                    { 
+                    <td>
+                        <a asp-action="ContinueGame" asp-controller="Riddle" asp-route-id="@ViewBag.games[i].Id">
+                            Tęsti Žaidimą
+                        </a>
+                    </td>
+                    }
+                    else
+                    {
+                    <td>
+                        Pabaigta
+                    </td>
+                    }
+                </tr>
+                }                
+            </tbody>
+        </table>
+    </div>
+
+}

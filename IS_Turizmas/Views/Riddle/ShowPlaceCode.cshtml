@@ -1,0 +1,43 @@
+﻿@using IS_Turizmas.Models
+@model IS_Turizmas.Models.Riddle
+@*@model List<IS_Turizmas.Models.PlaceOfInterest>*@
+@{
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>ShowPlaceCode</h1>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+        @*@if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }*@
+    </div>
+    @*<div class="col-md-10 mx-auto">
+            <div class="row">
+            <div class="col-md-6"><a asp-action="CreateRouteDescription">Kurti naują maršrutą</a></div>
+            <div class="col-md-6 text-md-right"><a asp-action="CalculateRouteUniqueness">Apskaičiuoti maršruto unikalumo indeksą</a></div>
+            </div>
+        </div>*@
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-10 mx-auto">
+                <form asp-controller="Riddle" asp-action="AnswerPlaceCode" asp-route-id="@ViewBag.id" method="POST">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label><strong>@ViewBag.Riddle.PlaceCode</strong></label>
+                        <input type="text" class="form-control" asp-for="PlaceCodeAnswer" placeholder="Įveskite atsakymą" />
+                        <span asp-validation-for="PlaceCodeAnswer" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary"> Spėti mįslę</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

@@ -10,6 +10,7 @@ namespace IS_Turizmas.Models
         public PlaceOfInterest()
         {
             Route_PlaceOfInterest = new HashSet<Route_PlaceOfInterest>();
+            Riddle = new HashSet<Riddle>();
         }
 
 
@@ -27,7 +28,7 @@ namespace IS_Turizmas.Models
         [Required(ErrorMessage = "Laukas yra privalomas")]
         public int Id { get; set; }
 
-
+        public virtual ICollection<Riddle> Riddle { get; set; }
         public virtual ICollection<Route_PlaceOfInterest> Route_PlaceOfInterest { get; set; }
     }
 }
