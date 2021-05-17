@@ -41,7 +41,7 @@ namespace IS_Turizmas.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveRating(int id, [Bind("Comment, Rating")] PlaceOfInterestComment evaluation)
+        public async Task<IActionResult> CreateComment(int id, [Bind("Comment, Rating")] PlaceOfInterestComment evaluation)
         {
 
             if (!ModelState.IsValid)
