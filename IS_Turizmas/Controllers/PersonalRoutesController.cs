@@ -283,7 +283,12 @@ namespace IS_Turizmas.Controllers
                 TempData["ErrorMessage"] = "Nepavyko gauti orų. Per tolima data.";
                 return false;
                 //return RedirectToAction("OpenFavouriteRoutes");
+            } else if (currClientRoute.Calendar_date < DateTime.Today)
+            {
+                TempData["ErrorMessage"] = "Nepavyko gauti orų. Data jau praėjusi.";
+                return false;
             }
+                
 
             var firstForecastList = firstPlaceForecast["list"]
                 .Select(o =>
@@ -300,6 +305,12 @@ namespace IS_Turizmas.Controllers
                 })
                 .Where(jo => jo != null)
                 .ToList();
+
+            if (firstForecastList.Count == 0)
+            {
+                TempData["ErrorMessage"] = "Nepavyko gauti orų.";
+                return false;
+            }
 
             firstForecastList[0]["weather"][0]["main"] = "rain";
 
