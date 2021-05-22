@@ -142,14 +142,17 @@ namespace IS_Turizmas.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveEditedRoute(int id, [Bind("Start_date, Finish_date, State_Id, Calendar_date, Route_Id," +
+        public async Task<IActionResult> SaveEditedRoute(int id, [Bind("Start_date, Finish_date, State_Id, Calendar_date, Route_id," +
             "CurrentNumber")] ClientRoute place)
         {
+            var testPlace = _context.ClientRoute.Find(1);
             ClientRoute oldPlace = _context.ClientRoute.Find(id);
-            //if (oldRoute.FkRegistruotasVartotojas != int.Parse(_signInManager.UserManager.GetUserId(User)))
-            //{
-            //    return NotFound();
-            //}
+            ////if (oldRoute.FkRegistruotasVartotojas != int.Parse(_signInManager.UserManager.GetUserId(User)))
+            ////{
+            ////    return NotFound();
+            ////}
+
+
             oldPlace.Start_date = place.Start_date;
             oldPlace.Finish_date = place.Finish_date;
             oldPlace.State_Id = place.State_Id;
@@ -157,16 +160,17 @@ namespace IS_Turizmas.Controllers
             oldPlace.Route_id = place.Route_id;
             oldPlace.CurrentNumber = place.CurrentNumber;
 
+            ////if (!ModelState.IsValid)
+            ////{
+            ////    ViewBag.LaikoIverciai = _context.LaikoIverciai.ToList();
+            ////    return View("~/Views/Routes/EditRouteDescription.cshtml");
+            ////}
+
             //if (!ModelState.IsValid)
             //{
-            //    ViewBag.LaikoIverciai = _context.LaikoIverciai.ToList();
-            //    return View("~/Views/Routes/EditRouteDescription.cshtml");
+            //    TempData["ErrorMessage"] = "Neužpildėte visų laukų";
+            //    return RedirectToAction("EditPlaceOfInterest", new { id = id });
             //}
-            if (!ModelState.IsValid)
-            {
-                TempData["ErrorMessage"] = "Neužpildėte visų laukų";
-                return RedirectToAction("EditPlaceOfInterest", new { id = id });
-            }
 
 
             try
@@ -455,8 +459,8 @@ namespace IS_Turizmas.Controllers
          */
         public async Task<bool> GetWeatherForecastByDate(int clientRouteId)
         {
-            var testItemRoute = _context.PersonalRouteItem
-                .Where(o => o.userRoute_id == 1).Select(o => o.Item).ToArray();
+            //var testItemRoute = _context.PersonalRouteItem
+            //    .Where(o => o.userRoute_id == 1).Select(o => o.Item).ToArray();
 
             var test2 = _context.PersonalRouteItem.Include(o => o.userRoute_idNavigation)
                 .Select(o => o.userRoute_idNavigation.Start_date).ToArray();

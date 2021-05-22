@@ -7,10 +7,10 @@ namespace IS_Turizmas.Models
 {
     public partial class PersonalRouteItem
     {
-        //public PersonalRouteItem()
-        //{
-        //    ClientRoute = new HashSet<ClientRoute>();
-        //}
+        public PersonalRouteItem()
+        {
+            ClientRoute = new HashSet<ClientRoute>();
+        }
 
         public string Item { get; set; }
         public int Id { get; set; }
@@ -19,6 +19,6 @@ namespace IS_Turizmas.Models
         public virtual ClientRoute userRoute_idNavigation { get; set; }
 
 
-        //public virtual ICollection<ClientRoute> ClientRoute { get; set; }
+        public virtual ICollection<ClientRoute> ClientRoute { get; set; }
     }
 }

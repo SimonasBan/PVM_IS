@@ -24,9 +24,9 @@ namespace IS_Turizmas.Models
         public int Id { get; set; }
         public int CurrentNumber { get; set; }
 
-        public virtual ClientRouteState State_IdNavigation { get; set; }
-        public virtual Route Route_idNavigation { get; set; }
-        //public virtual PersonalRouteItem Item_idNavigation { get; set; }
+        public virtual ClientRouteState? State_IdNavigation { get; set; }
+        public virtual Route? Route_idNavigation { get; set; }
+        public virtual PersonalRouteItem? Item_idNavigation { get; set; }
 
 
         public virtual ICollection<PersonalRouteItem> PersonalRouteItem { get; set; }

@@ -173,11 +173,11 @@ namespace IS_Turizmas.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Route_id");
 
-                //entity.HasOne(d => d.Item_idNavigation)
-                //    .WithMany(p => p.ClientRoute)
-                //    .HasForeignKey(d => d.Item_id)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("Item_id");
+                entity.HasOne(d => d.Item_idNavigation)
+                    .WithMany(p => p.ClientRoute)
+                    .HasForeignKey(d => d.Item_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Item_id");
 
                 entity.Property(e => e.State_Id)
                     .HasColumnName("State_Id")
