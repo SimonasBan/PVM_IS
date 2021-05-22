@@ -41,6 +41,18 @@ namespace IS_Turizmas.Controllers
             public int? CurrentNumber { get; set; }
             public int? Item_id { get; set; }
         }
+        public class PlaceOfInterestAndOrder
+        {
+            public string Pavadinimas { get; set; }
+            public string? Aprasymas { get; set; }
+            public string? Miestas { get; set; }
+            public string? Savivaldybe { get; set; }
+            public string? Koordinates { get; set; }
+            public string? Adresas { get; set; }
+            public double? Bilieto_kaina { get; set; }
+            public int? Taskai { get; set; }
+            public int? Eile { get; set; }
+        }
         public async Task<IActionResult> OpenFavouriteRoutes()
         {
             //ViewBag.places = _context.PlaceOfInterest.ToList();
@@ -125,7 +137,10 @@ namespace IS_Turizmas.Controllers
             var clientRoute = _context.ClientRoute.Find(id);
             var route = _context.Route.Find(clientRoute.Route_id);
             var route_place = _context.PersonalRouteItem
-                .Where(p => p.user_id == clientRoute.Id);
+                .Where(p => p.userRoute_id == clientRoute.Id);
+
+
+            
 
             ViewBag.personalItemList = route_place.ToList();
             return View();
@@ -136,8 +151,26 @@ namespace IS_Turizmas.Controllers
             var route = _context.Route.Find(id);
             var route_place = _context.Route_PlaceOfInterest
                 .Where(p => p.Route_id == route.Id);
-           
-            ViewBag.personalRoutePlaceOfInterestList = route_place.ToList();
+
+            var duomenukai =
+                from routePlaceOfIn in _context.Route_PlaceOfInterest
+                join placeOfIn in _context.PlaceOfInterest on routePlaceOfIn.PlaceOfInterest_id equals placeOfIn.Id
+                where routePlaceOfIn.Route_id == id
+                orderby routePlaceOfIn.Number
+                select new PlaceOfInterestAndOrder
+                {
+                    Pavadinimas = placeOfIn.Pavadinimas,
+                    Aprasymas = placeOfIn.Aprasymas,
+                    Miestas = placeOfIn.Miestas,
+                    Adresas = placeOfIn.Adresas,
+                    Bilieto_kaina = placeOfIn.Bilieto_kaina,
+                    Savivaldybe = placeOfIn.Savivaldybe,
+                    Koordinates = placeOfIn.Koordinates,
+                    Taskai = placeOfIn.Taskai,
+                    Eile= routePlaceOfIn.Number
+                };
+
+            ViewBag.personalRoutePlaceOfInterestList = duomenukai.OrderBy(o=>o.Eile).ToList();
             return View();
         }
         [HttpPost]

@@ -19,8 +19,9 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Pavadinimas</th>
-                    <th scope="col">Atstumas</th>
-                    <th scope="col">Reitingas</th>
+                    <th scope="col">Aprašymas</th>
+                    <th scope="col">Miestas</th>
+                    <th scope="col">Eilės Nr.</th>
                     @*<th scope="col">Pradzios data</th>
                         <th scope="col">Pabaigos data</th>*@
                     <th scope="col">Veiksmai</th>
@@ -32,9 +33,10 @@
                     
                     <tr>
                         <th>@(i + 1)</th>
-                        @*<td>@ViewBag.clientRoutes[i].Name</td>
-                        <td>@ViewBag.clientRoutes[i].Length km</td>
-                        <td>@ViewBag.clientRoutes[i].Rating </td>*@
+                        <td>@ViewBag.personalRoutePlaceOfInterestList[i].Pavadinimas</td>
+                        <td>@ViewBag.personalRoutePlaceOfInterestList[i].Aprasymas</td>
+                        <td>@ViewBag.personalRoutePlaceOfInterestList[i].Miestas</td>
+                        <td>@ViewBag.personalRoutePlaceOfInterestList[i].Eile</td>
                         @*<td>@ViewBag.clientRoutes[i].Start_date</td>
                             <td>@ViewBag.clientRoutes[i].Finish_date</td>*@
                         @*@if (ViewBag.clientRoutes[i].State_Id == 1)
@@ -69,9 +71,14 @@
                                     Redaguoti
                                 </a>*@
                             @*<a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                                Peržiūrėti
+                                Kiesti elės Nr.
                             </a>
                         </td>*@
+                        <td>
+                            <a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                Kiesti elės Nr.
+                            </a>
+                        </td>
 
                     </tr>
                 }

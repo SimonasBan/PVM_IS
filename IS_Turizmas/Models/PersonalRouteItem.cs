@@ -14,7 +14,7 @@ namespace IS_Turizmas.Models
 
         public string Item { get; set; }
         public int Id { get; set; }
-        public int user_id { get; set; }
+        public int userRoute_id { get; set; }
 
         public virtual ClientRoute ClientRoute_IdNavigation { get; set; }
 

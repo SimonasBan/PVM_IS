@@ -227,18 +227,18 @@ namespace IS_Turizmas.Models
                     .HasColumnName("Item")
                     .HasMaxLength(255);
 
-                entity.HasIndex(e => e.user_id)
-                    .HasName("user_id");
+                entity.HasIndex(e => e.userRoute_id)
+                    .HasName("userRoute_id");
 
-                entity.Property(e => e.user_id)
-                    .HasColumnName("user_id")
+                entity.Property(e => e.userRoute_id)
+                    .HasColumnName("userRoute_id")
                     .HasColumnType("int(11)");
 
                 //entity.HasOne(d => d.ClientRoute_IdNavigation)
                 //     .WithMany(p => p.PersonalRouteItem)
-                //     .HasForeignKey(d => d.user_id)
+                //     .HasForeignKey(d => d.userRoute_id)
                 //     .OnDelete(DeleteBehavior.ClientSetNull)
-                //     .HasConstraintName("user_id");
+                //     .HasConstraintName("userRoute_id");
             });
 
             modelBuilder.Entity<PlaceOfInterestComment>(entity =>
