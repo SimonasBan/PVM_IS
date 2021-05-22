@@ -60,6 +60,7 @@
                         <input type="date" asp-for="Calendar_date" class="form-control" value="@ViewBag.clientRouteToEdit[0].Calendar_date.ToString("MM/dd/yyyy")" />
                         <span asp-validation-for="Calendar_date" class="text-danger"></span>
                     </div>
+                    <p>@ViewBag.clientRouteToEdit[0].Route_Id</p>
                     <div style="display:none">
                         <div class="form-group">
                             <label asp-for="Route_id" class="control-label"></label>

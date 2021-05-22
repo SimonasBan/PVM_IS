@@ -234,6 +234,12 @@ namespace IS_Turizmas.Models
                     .HasColumnName("userRoute_id")
                     .HasColumnType("int(11)");
 
+                entity.HasOne(d => d.userRoute_idNavigation)
+                    .WithMany(p => p.PersonalRouteItem)
+                    .HasForeignKey(d => d.userRoute_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("userRoute_id");
+
                 //entity.HasOne(d => d.ClientRoute_IdNavigation)
                 //     .WithMany(p => p.PersonalRouteItem)
                 //     .HasForeignKey(d => d.userRoute_id)
