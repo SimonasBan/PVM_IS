@@ -118,11 +118,15 @@ namespace IS_Turizmas.Controllers
             //    };
             //var clientRoutesList = clientRoutesWithRoutes.ToList();
             //ViewBag.clientRoutes = clientRoutesList;
+            //var clientRoute = _context.ClientRoute.Find(id);
+            //var route = _context.Route.Find(clientRoute.Route_id);
+            //var route_place = _context.PersonalRouteItem
+            //    .Where(p => p.Id == route.Id);
             var clientRoute = _context.ClientRoute.Find(id);
             var route = _context.Route.Find(clientRoute.Route_id);
             var route_place = _context.PersonalRouteItem
-                .Where(p => p.Id == route.Id);
-           
+                .Where(p => p.user_id == clientRoute.Id);
+
             ViewBag.personalItemList = route_place.ToList();
             return View();
         }
