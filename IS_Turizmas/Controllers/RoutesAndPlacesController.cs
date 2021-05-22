@@ -44,11 +44,21 @@ namespace IS_Turizmas.Controllers
         public async Task<IActionResult> CreateComment(int id, [Bind("Comment, Rating")] PlaceOfInterestComment evaluation)
         {
 
-            if (!ModelState.IsValid)
+            if(evaluation.Comment == null)
+            {
+                evaluation.Comment = "";
+            }
+            if(evaluation.Rating == null)
             {
                 TempData["ErrorMessage"] = "Neužpildėte visų laukų";
                 return RedirectToAction("OpenPlaceRating", new { id = id });
             }
+
+            //if (!ModelState.IsValid)
+            //{
+            //    TempData["ErrorMessage"] = "Neužpildėte visų laukų";
+            //    return RedirectToAction("OpenPlaceRating", new { id = id });
+            //}
 
             try
             {
