@@ -45,22 +45,25 @@
             <tbody>
                 @for (var i = 0; i < ViewBag.places.Count; i++)
                 {
-                    <tr>
-                        <th>@(i + 1)</th>
-                        <td>@ViewBag.places[i].Pavadinimas</td>
-                        <td>@ViewBag.places[i].Aprasymas</td>
-                        <td>@ViewBag.places[i].Miestas</td>
-                        <td>@ViewBag.places[i].Adresas</td>
-                        <td>@ViewBag.places[i].Savivaldybe</td>
-                        <td>@ViewBag.places[i].Koordinates</td>
-                        <td>@String.Format("{0:N2}", @ViewBag.places[i].Bilieto_kaina) &#8364;</td>
-                        <td>@ViewBag.places[i].Taskai</td>
-                        <td>
-                            <a asp-action="OpenPlaceRating" asp-controller="RoutesAndPlaces" asp-route-id="@ViewBag.places[i].Id">
-                                Vertinti
-                            </a>
-                        </td>
-                    </tr>
+                <tr>
+                    <th>@(i + 1)</th>
+                    <td>@ViewBag.places[i].Pavadinimas</td>
+                    <td>@ViewBag.places[i].Aprasymas</td>
+                    <td>@ViewBag.places[i].Miestas</td>
+                    <td>@ViewBag.places[i].Adresas</td>
+                    <td>@ViewBag.places[i].Savivaldybe</td>
+                    <td>@ViewBag.places[i].Koordinates</td>
+                    <td>@String.Format("{0:N2}", @ViewBag.places[i].Bilieto_kaina) &#8364;</td>
+                    <td>@ViewBag.places[i].Taskai</td>
+                    <td>
+                        <a asp-action="OpenPlaceRating" asp-controller="RoutesAndPlaces" asp-route-id="@ViewBag.places[i].Id">
+                            Vertinti
+                        </a>
+                        <a asp-action="Suggest" asp-controller="RoutesAndPlaces" asp-route-id="@ViewBag.places[i].Id">
+                            Siūlyti mįslę
+                        </a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
