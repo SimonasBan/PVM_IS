@@ -30,6 +30,7 @@ namespace IS_Turizmas.Models
         public virtual DbSet<Riddle> Riddle { get; set; }
         public virtual DbSet<ClientOrientationGame> ClientOrientationGame { get; set; }
         public virtual DbSet<OrientationGame_Riddle> OrientationGame_Riddle { get; set; }
+        public virtual DbSet<PersonalRouteItem> PersonalRouteItem { get; set; }
 
 
 

@@ -14,6 +14,10 @@ namespace IS_Turizmas.Models
 
         public string Item { get; set; }
         public int Id { get; set; }
+        //public int Client_Id { get; set; }
+
+        //public virtual ClientRoute ClientRoute_Id { get; set; }
+
 
         public virtual ICollection<ClientRoute> ClientRoute { get; set; }
     }

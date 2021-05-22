@@ -1,0 +1,92 @@
+﻿
+@using IS_Turizmas.Models
+@{
+    ViewData["Title"] = "Asmeninis maršrutas";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>Asmeninis maršrutas</h1>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+        <a asp-action="CreatePlaceOfInterest" asp-controller="PlaceOfInterest">
+            Pridėti naują maršrutą
+        </a>
+    </div>
+    <div class="col-md-10 mx-auto">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pavadinimas</th>
+                    <th scope="col">Atstumas</th>
+                    <th scope="col">Reitingas</th>
+                    @*<th scope="col">Pradzios data</th>
+                    <th scope="col">Pabaigos data</th>*@
+                    <th scope="col">Veiksmai</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < ViewBag.clientRoutes.Count; i++)
+                {
+                    if (ViewBag.clientRoutes[i].State_Id == 4)
+                        continue;
+                    <tr>
+                        <th>@(i + 1)</th>
+                        <td>@ViewBag.clientRoutes[i].Name</td>
+                        <td>@ViewBag.clientRoutes[i].Length km</td>
+                        <td>@ViewBag.clientRoutes[i].Rating </td>
+                        @*<td>@ViewBag.clientRoutes[i].Start_date</td>
+                        <td>@ViewBag.clientRoutes[i].Finish_date</td>*@
+                        @*@if (ViewBag.clientRoutes[i].State_Id == 1)
+                            {
+                                <td>
+                                    <a asp-action="StartRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                        Pradėti
+                                    </a>
+                                </td>
+                            }
+                            else if (ViewBag.clientRoutes[i].State_Id == 2)
+                            {
+                                <td>
+                                    <a asp-action="ContinueRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                        Tęsti
+                                    </a>
+                                </td>
+                            }
+                            else if (ViewBag.clientRoutes[i].State_Id == 3)
+                            {
+                                <td>
+                                    <a>
+                                        Pabaigta
+                                    </a>
+                                </td>
+                            }*@
+                    <td>
+                        <a asp-action="TryDeleteClientRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                            Trinti
+                        </a>
+                        @*<a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                            Redaguoti
+                        </a>*@
+                        <a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                            Peržiūrėti
+                        </a>
+                    </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+       
+    </div>
+}
+@*<td>
+        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+    </td>*@
+

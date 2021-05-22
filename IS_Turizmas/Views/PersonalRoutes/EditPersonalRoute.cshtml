@@ -1,0 +1,115 @@
+﻿@model IS_Turizmas.Models.ClientRoute
+
+@{
+    <script>
+        document.getElementById("description-text").value += 'Test Feedback';
+    </script>
+    ViewData["Title"] = "EditPersonalRoute";
+
+
+
+    <div class="container-fluid">
+        <div class="col-md-10 mx-auto text-center py-3 my-3">
+            <h4>Redaguoti lankytiną objektą</h4>
+        </div>
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+        <div class="row">
+            <div class="col-md-10 mx-auto">
+                <form asp-controller="PersonalRoutes" asp-action="SaveEditedRoute" asp-route-id="@ViewBag.clientRouteToEdit[0].ClientRoute_Id" method="POST">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label><strong>Pavadinimas</strong></label>
+                        <input type="text" class="form-control" value="@ViewBag.clientRouteToEdit[0].Name" readonly />
+
+                    </div>
+                    <div class="form-group">
+                        <label><strong>Atsumas</strong></label>
+                        <input type="text" class="form-control" value="@ViewBag.clientRouteToEdit[0].Length" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label><strong>Aprašymas</strong></label>
+                        <input type="text" class="form-control" value="@ViewBag.clientRouteToEdit[0].Description" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label><strong>Įvertinimas</strong></label>
+                        <input type="text" class="form-control" value="@ViewBag.clientRouteToEdit[0].Rating" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Start_date" class="control-label"><strong>Pradžios data</strong></label>
+                        <input type="date" asp-for="Start_date" class="form-control" value="@ViewBag.clientRouteToEdit[0].Start_date" />
+                        <span asp-validation-for="Start_date" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Finish_date" class="control-label"><strong>Pabaigos data</strong></label>
+                        <input type="date" asp-for="Finish_date" class="form-control" value="@ViewBag.clientRouteToEdit[0].Finish_date" />
+                        <span asp-validation-for="Finish_date" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="State_Id" class="control-label"><strong>Būsena</strong></label>
+                        <input asp-for="State_Id" class="form-control" value="@ViewBag.clientRouteToEdit[0].State_Id" />
+                        <span asp-validation-for="State_Id" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="Calendar_date" class="control-label"><strong>Kalendoriaus įrašo data</strong></label>
+                        <input type="date" asp-for="Calendar_date" class="form-control" value="@ViewBag.clientRouteToEdit[0].Calendar_date.ToString("MM/dd/yyyy")" />
+                        <span asp-validation-for="Calendar_date" class="text-danger"></span>
+                    </div>
+                    <div style="display:none">
+                        <div class="form-group">
+                            <label asp-for="Route_id" class="control-label"></label>
+                            <input asp-for="Route_id" class="form-control" value="@ViewBag.clientRouteToEdit[0].Route_Id" />
+                            <span asp-validation-for="Route_id" class="text-danger"></span>
+                        </div>
+
+                        @{if (ViewBag.clientItemEdit.Count > 0)
+                            {
+
+                                var item = ViewBag.clientItemEdit[0].Item_id;
+                                <div class="form-group">
+                                    <label asp-for="Item_id" class="control-label"></label> }
+                                    <input asp-for="Item_id" class="form-control" value="@item" />
+                                    <span asp-validation-for="Item_id" class="text-danger"></span>
+
+                                </div>
+                            }
+                        }
+
+                        <div class="form-group">
+                            <label asp-for="Id" class="control-label"></label>
+                            <input asp-for="Id" class="form-control" />
+                            <span asp-validation-for="Id" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CurrentNumber" class="control-label"></label>
+                            <input asp-for="CurrentNumber" class="form-control" value="@ViewBag.clientRouteToEdit[0].CurrentNumber" />
+                            <span asp-validation-for="CurrentNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <p>@ViewBag.clientRouteToEdit[0].Route_Id</p>
+                    <div>
+                        <button class="btn btn-primary" asp-action="OpenRouteObjectss" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRouteToEdit[0].Route_Id">
+                            Valdyti maršruto lankytinus objektus
+                        </button>
+                    </div>
+                    <br />
+                    <div>
+                        <button class="btn btn-primary" asp-action="OpenItemList" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRouteToEdit[0].ClientRoute_Id">
+                            Valdyti svarbių daiktų sąrašą
+                        </button>
+                    </div>
+                    <br />
+                    <div>
+                        <button type="submit" class="btn btn-success">Sukurti</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+}
