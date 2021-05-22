@@ -125,7 +125,7 @@ namespace IS_Turizmas.Controllers
             var clientRoute = _context.ClientRoute.Find(id);
             var route = _context.Route.Find(clientRoute.Route_id);
             var route_place = _context.PersonalRouteItem
-                .Where(p => p.user_id == clientRoute.Id);
+                .Where(p => p.userRoute_id == clientRoute.Id);
 
             ViewBag.personalItemList = route_place.ToList();
             return View();
@@ -455,6 +455,12 @@ namespace IS_Turizmas.Controllers
          */
         public async Task<bool> GetWeatherForecastByDate(int clientRouteId)
         {
+            var testItemRoute = _context.PersonalRouteItem
+                .Where(o => o.userRoute_id == 1).Select(o => o.Item).ToArray();
+
+            var test2 = _context.PersonalRouteItem.Include(o => o.userRoute_idNavigation)
+                .Select(o => o.userRoute_idNavigation.Start_date).ToArray();
+
             var currClientRoute = _context.ClientRoute.Find(clientRouteId);
 
             var currRoute = _context.ClientRoute

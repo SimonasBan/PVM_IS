@@ -7,6 +7,11 @@ namespace IS_Turizmas.Models
 {
     public partial class ClientRoute
     {
+        public ClientRoute()
+        {
+            PersonalRouteItem = new HashSet<PersonalRouteItem>();
+        }
+
         public DateTime? Start_date { get; set; }
         public DateTime? Finish_date { get; set; }
         [Required(ErrorMessage = "Laukas yra privalomas")]
@@ -21,7 +26,10 @@ namespace IS_Turizmas.Models
 
         public virtual ClientRouteState State_IdNavigation { get; set; }
         public virtual Route Route_idNavigation { get; set; }
-        public virtual PersonalRouteItem Item_idNavigation { get; set; }
+        //public virtual PersonalRouteItem Item_idNavigation { get; set; }
+
+
+        public virtual ICollection<PersonalRouteItem> PersonalRouteItem { get; set; }
         /*
          * Client table is not realised yet. Uncomment, when client
          * table will be realised and needed.

@@ -173,11 +173,11 @@ namespace IS_Turizmas.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Route_id");
 
-                entity.HasOne(d => d.Item_idNavigation)
-                    .WithMany(p => p.ClientRoute)
-                    .HasForeignKey(d => d.Item_id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Item_id");
+                //entity.HasOne(d => d.Item_idNavigation)
+                //    .WithMany(p => p.ClientRoute)
+                //    .HasForeignKey(d => d.Item_id)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("Item_id");
 
                 entity.Property(e => e.State_Id)
                     .HasColumnName("State_Id")
@@ -227,12 +227,18 @@ namespace IS_Turizmas.Models
                     .HasColumnName("Item")
                     .HasMaxLength(255);
 
-                entity.HasIndex(e => e.user_id)
-                    .HasName("user_id");
+                entity.HasIndex(e => e.userRoute_id)
+                    .HasName("userRoute_id");
 
-                entity.Property(e => e.user_id)
-                    .HasColumnName("user_id")
+                entity.Property(e => e.userRoute_id)
+                    .HasColumnName("userRoute_id")
                     .HasColumnType("int(11)");
+
+                entity.HasOne(d => d.userRoute_idNavigation)
+                    .WithMany(p => p.PersonalRouteItem)
+                    .HasForeignKey(d => d.userRoute_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("userRoute_id");
 
                 //entity.HasOne(d => d.ClientRoute_IdNavigation)
                 //     .WithMany(p => p.PersonalRouteItem)
