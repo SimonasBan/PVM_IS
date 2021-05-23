@@ -520,9 +520,16 @@ namespace IS_Turizmas.Controllers
                 };
             var itemList = clientRouteImportantItem.ToList();
             ViewBag.clientItem = itemList;
-
-
-
+            return View();
+        }
+        public async Task<IActionResult> GetRouteRecommendations()
+        {            
+            var clinetR = _context.ClientRoute;
+            var recommendations =
+                from recommendedRoutes in _context.Route
+                where !clinetR.Any(r => recommendedRoutes.Id == r.Route_id) && recommendedRoutes.Rating > 8
+                select recommendedRoutes;
+            ViewBag.recommendedRoutes = recommendations.ToList();
             return View();
         }
         public class LocationDetails_IpApi
