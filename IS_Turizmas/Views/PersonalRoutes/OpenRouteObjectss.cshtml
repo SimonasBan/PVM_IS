@@ -11,7 +11,7 @@
         {
             <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
         }
-        <a asp-action="AddPlaceOfInterest" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.RouteID">
+        <a asp-action="OpenRouteObjectAdd" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.RouteID">
             Pridėti lankytiną objektą
         </a>
 
@@ -41,24 +41,14 @@
                         <td>@ViewBag.personalRoutePlaceOfInterestList[i].Miestas</td>
                         <td>@ViewBag.personalRoutePlaceOfInterestList[i].Eile</td>
                         
-                        @*<td>
-                            <a asp-action="TryDeleteClientRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                                Trinti
-                            </a>*@
-                            @*<a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                                    Redaguoti
-                                </a>*@
-                            @*<a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                                Kiesti elės Nr.
-                            </a>
-                        </td>*@
+                        
 
                     <td>
-                        <a asp-action="DeleteRoutePlaceOfInterest" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.personalRoutePlaceOfInterestList[i].Id">
+                        <a asp-action="DeleteRoutePlace" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.personalRoutePlaceOfInterestList[i].Id">
                             Trinti
                         </a>
                         @{TempData["RouteID"] = ViewBag.personalRoutePlaceOfInterestList[i].RouteID;}
-                        <a asp-action="ChangeQueue" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.personalRoutePlaceOfInterestList[i].Id">
+                        <a asp-action="ReorderRouteObject" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.personalRoutePlaceOfInterestList[i].Id">
                             Kiesti elės Nr.
                         </a>
                     </td>

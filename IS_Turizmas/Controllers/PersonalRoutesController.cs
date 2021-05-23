@@ -133,7 +133,7 @@ namespace IS_Turizmas.Controllers
             ViewBag.personalItemList = route_place.ToList();
             return View();
         }
-        public async Task<IActionResult> ChangeQueue(int id)
+        public async Task<IActionResult> ReorderRouteObject(int id)
         {
             var item = _context.Route_PlaceOfInterest.Find(id);
 
@@ -144,13 +144,13 @@ namespace IS_Turizmas.Controllers
             ViewBag.personalRoutePlaceOfInterest = item;
             return View();
         }
-        public async Task<IActionResult> AddPlaceOfInterest(int id)
+        public async Task<IActionResult> OpenRouteObjectAdd(int id)
         {
             ViewBag.IDRoute = id;
             ViewBag.places = _context.PlaceOfInterest.ToList();
             return View();
         }
-        public async Task<IActionResult> DeleteRoutePlaceOfInterest(int id)
+        public async Task<IActionResult> DeleteRoutePlace(int id)
         {
             //if (_signInManager.IsSignedIn(User) && _signInManager.UserManager.GetUserId(User) == _context.Marsrutai.Find(id).FkRegistruotasVartotojas.ToString())
             var salinimasIsRoute = _context.Route_PlaceOfInterest.Find(id).Route_id;
@@ -185,7 +185,6 @@ namespace IS_Turizmas.Controllers
                 from routePlaceOfIn in _context.Route_PlaceOfInterest
                 join placeOfIn in _context.PlaceOfInterest on routePlaceOfIn.PlaceOfInterest_id equals placeOfIn.Id
                 where routePlaceOfIn.Route_id == id
-                orderby routePlaceOfIn.Number
                 select new PlaceOfInterestAndRoute
                 {
                     Id = routePlaceOfIn.Id,
@@ -206,7 +205,7 @@ namespace IS_Turizmas.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveEditedRoute(int id, [Bind("Start_date, Finish_date, State_Id, Calendar_date, Route_id," +
+        public async Task<IActionResult> SubmitRouteInfo(int id, [Bind("Start_date, Finish_date, State_Id, Calendar_date, Route_id," +
             "CurrentNumber")] ClientRoute place)
         {
             var testPlace = _context.ClientRoute.Find(1);
@@ -271,7 +270,7 @@ namespace IS_Turizmas.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveEditedQueqe(int id, [Bind("Number")] Route_PlaceOfInterest place)
+        public async Task<IActionResult> SaveEditedQueue(int id, [Bind("Number")] Route_PlaceOfInterest place)
         {
 
             Route_PlaceOfInterest oldPlace = _context.Route_PlaceOfInterest.Find(id);

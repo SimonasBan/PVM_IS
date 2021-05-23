@@ -39,39 +39,11 @@
                         <td>@ViewBag.clientRoutes[i].Name</td>
                         <td>@ViewBag.clientRoutes[i].Length km</td>
                         <td>@ViewBag.clientRoutes[i].Rating </td>
-                        @*<td>@ViewBag.clientRoutes[i].Start_date</td>
-                            <td>@ViewBag.clientRoutes[i].Finish_date</td>*@
-                        @*@if (ViewBag.clientRoutes[i].State_Id == 1)
-                            {
-                                <td>
-                                    <a asp-action="StartRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                                        Pradėti
-                                    </a>
-                                </td>
-                            }
-                            else if (ViewBag.clientRoutes[i].State_Id == 2)
-                            {
-                                <td>
-                                    <a asp-action="ContinueRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                                        Tęsti
-                                    </a>
-                                </td>
-                            }
-                            else if (ViewBag.clientRoutes[i].State_Id == 3)
-                            {
-                                <td>
-                                    <a>
-                                        Pabaigta
-                                    </a>
-                                </td>
-                            }*@
+                  
                         <td>
                             <a asp-action="TryDeleteClientRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
                                 Trinti
                             </a>
-                            @*<a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                                    Redaguoti
-                                </a>*@
                             <a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
                                 Peržiūrėti
                             </a>
@@ -84,9 +56,5 @@
 
     </div>
 }
-@*<td>
-        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-    </td>*@
+
 
