@@ -82,6 +82,13 @@ namespace IS_Turizmas.Controllers
             ViewBag.clientRoutes = clientRoutesList;
             return View();
         }
+        public async Task<IActionResult> EditPersonalRouteItem(int id)
+        {
+            var item = _context.PersonalRouteItem.Where(i => i.Id == id).ToList();
+
+            ViewBag.clientItem = item;
+            return View();
+        }
         public async Task<IActionResult> OpenClientRouteList()
         {
             var clientRoutesWithRoutes =
@@ -243,6 +250,33 @@ namespace IS_Turizmas.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitRouteItemInfo(int id, [Bind("Item", "Id", "userRoute_id")] PersonalRouteItem itemas)
+        {
+            PersonalRouteItem oldItem = _context.PersonalRouteItem.Find(id);
+
+            oldItem.Item = itemas.Item;
+
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Neužpildėte visų laukų";
+                return RedirectToAction("EditPersonalRouteItem", new { id = id });
+            }
+
+            try
+            {
+                _context.Update(oldItem);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+                throw;
+            }
+
+            return RedirectToAction("OpenItemList", new { id = itemas.userRoute_id });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPlace(int Route_id, [Bind("Id")] PlaceOfInterest place)
         {
             //ClientRoute oldPlace = _context.ClientRoute.Find(id);
@@ -267,6 +301,29 @@ namespace IS_Turizmas.Controllers
             }
             TempData["SuccessMessage"] = "Objektas pridėtas";
             return RedirectToAction("OpenRouteObjectss", new { id = Route_id });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddItem(int id, [Bind("Item", "userRoute_id")] PersonalRouteItem itemas)
+        {
+            if (itemas.Item == null)
+            {
+                TempData["ErrorMessage"] = "Neužpildėte visų laukų";
+                return RedirectToAction("AddPersonalRouteItem", new { id = id });
+            }
+
+            try
+            {
+                _context.PersonalRouteItem.Add(itemas);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+                throw;
+            }
+            TempData["SuccessMessage"] = "Daiktas pridėtas";
+            return RedirectToAction("OpenItemList", new { id = itemas.userRoute_id });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -421,6 +478,14 @@ namespace IS_Turizmas.Controllers
 
             //TempData["SuccessMessage"] = "Maršrutas pašalintas";
             return RedirectToAction("OpenClientRouteList");
+        }
+        public async Task<IActionResult> DeleteClientRouteItem(int id)
+        {
+            var listID = _context.PersonalRouteItem.Find(id).userRoute_id;
+            _context.PersonalRouteItem.Remove(_context.PersonalRouteItem.Find(id));
+            _context.SaveChanges();
+
+            return RedirectToAction("OpenItemList", new { id = listID });
         }
         public async Task<IActionResult> ViewPersonalRoute(int id)
         {

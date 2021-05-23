@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Daiktų sąrašas";
     <div class="col-md-10 mx-auto text-center py-3 my-3">
-        <h1>OpenItemList</h1>
+        <h1>Daiktų sąrašas</h1>
         @if (TempData["SuccessMessage"] != null)
         {
             <div class="alert alert-success">@TempData["SuccessMessage"]</div>
@@ -11,9 +11,9 @@
         {
             <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
         }
-        @*<a asp-action="CreatePlaceOfInterest" asp-controller="PlaceOfInterest">
+        <a asp-action="AddNewItem" asp-controller="PersonalRoutes">
                 Pridėti naują daiktą
-            </a>*@
+        </a>
     </div>
     <div class="col-md-10 mx-auto">
         <table class="table table-striped text-center">
@@ -32,12 +32,12 @@
                         <td>@ViewBag.personalItemList[i].Item</td>
 
                         <td>
-                            <a asp-action="#">
+                            <a asp-action="DeleteClientRouteItem" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.personalItemList[i].Id">
                                 Šalinti
                             </a>
-                            @*<a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                                    Redaguoti
-                                </a>*@
+                            <a asp-action="EditPersonalRouteItem" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.personalItemList[i].Id">
+                                Redaguoti
+                            </a>
                         </td>
 
                     </tr>

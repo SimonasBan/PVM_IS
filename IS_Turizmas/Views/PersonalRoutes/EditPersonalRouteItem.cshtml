@@ -1,0 +1,56 @@
+﻿@model IS_Turizmas.Models.PersonalRouteItem
+
+@{
+    <script>
+        document.getElementById("description-text").value += 'Test Feedback';
+    </script>
+    ViewData["Title"] = "EditPersonalRouteItem";
+
+
+
+    <div class="container-fluid">
+        <div class="col-md-10 mx-auto text-center py-3 my-3">
+            <h4>Redaguoti daiktą</h4>
+        </div>
+        @if (TempData["SuccessMessageR"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessageR"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+        <div class="row">
+            <div class="col-md-10 mx-auto">
+                <form asp-controller="PersonalRoutes" asp-action="SubmitRouteItemInfo" asp-route-id="@ViewBag.clientItem[0].Id" method="POST">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Item" class="control-label"><strong>Pavadinimas</strong></label>
+                        <p>@ViewBag.clientItem[0].Item</p>
+                        <p>@ViewBag.clientItem[0].Id</p>
+                        <p>@ViewBag.clientItem[0].userRoute_id</p>
+                        <input type="text" asp-for="Item" class="form-control" value="@ViewBag.clientItem[0].Item" />
+                        <span asp-validation-for="Item" class="text-danger"></span>
+                    </div>
+                    <div style="display:none">
+                        <div class="form-group">
+                            <label asp-for="Id" class="control-label"><strong>id</strong></label>
+                            <input asp-for="Id" class="form-control" value="@ViewBag.clientItem[0].Id" />
+                            <span asp-validation-for="Id" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="userRoute_id" class="control-label"><strong>kits id</strong></label>
+                            <input asp-for="userRoute_id" class="form-control" value="@ViewBag.clientItem[0].userRoute_id" />
+                            <span asp-validation-for="userRoute_id" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div>
+                            <button type="submit" class="btn btn-success">Išsaugoti</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+}
