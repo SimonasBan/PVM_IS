@@ -1,0 +1,62 @@
+﻿@using IS_Turizmas.Models
+@{
+    ViewData["Title"] = "OpenRouteObjects maršrutas";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>OpenRouteObjects</h1>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+        <a asp-action="OpenRouteObjectAdd" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.RouteID">
+            Pridėti lankytiną objektą
+        </a>
+
+    </div>
+    <div class="col-md-10 mx-auto">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pavadinimas</th>
+                    <th scope="col">Aprašymas</th>
+                    <th scope="col">Miestas</th>
+                    <th scope="col">Eilės Nr.</th>
+                    @*<th scope="col">Pradzios data</th>
+                        <th scope="col">Pabaigos data</th>*@
+                    <th scope="col">Veiksmai</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < ViewBag.personalRoutePlaceOfInterestList.Count; i++)
+                {
+
+                    <tr>
+                        <th>@(i + 1)</th>
+                        <td>@ViewBag.personalRoutePlaceOfInterestList[i].Pavadinimas</td>
+                        <td>@ViewBag.personalRoutePlaceOfInterestList[i].Aprasymas</td>
+                        <td>@ViewBag.personalRoutePlaceOfInterestList[i].Miestas</td>
+                        <td>@ViewBag.personalRoutePlaceOfInterestList[i].Eile</td>
+                        
+                        
+
+                    <td>
+                        <a asp-action="DeleteRoutePlace" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.personalRoutePlaceOfInterestList[i].Id">
+                            Trinti
+                        </a>
+                        @{TempData["RouteID"] = ViewBag.personalRoutePlaceOfInterestList[i].RouteID;}
+                        <a asp-action="ReorderRouteObject" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.personalRoutePlaceOfInterestList[i].Id">
+                            Kiesti elės Nr.
+                        </a>
+                    </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+

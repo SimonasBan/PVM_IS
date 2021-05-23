@@ -1,0 +1,55 @@
+﻿@using IS_Turizmas.Models
+@{
+    ViewData["Title"] = "Daiktų sąrašas";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>OpenItemList</h1>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+        @*<a asp-action="CreatePlaceOfInterest" asp-controller="PlaceOfInterest">
+                Pridėti naują daiktą
+            </a>*@
+    </div>
+    <div class="col-md-10 mx-auto">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pavadinimas</th>
+                    <th scope="col">Veiksmai</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < ViewBag.personalItemList.Count; i++)
+                {
+                    <tr>
+                        <th>@(i + 1)</th>
+                        <td>@ViewBag.personalItemList[i].Item</td>
+
+                        <td>
+                            <a asp-action="#">
+                                Šalinti
+                            </a>
+                            @*<a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                    Redaguoti
+                                </a>*@
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+}
+@*<td>
+        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+    </td>*@
+
