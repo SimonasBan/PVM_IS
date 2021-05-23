@@ -1,7 +1,14 @@
 ﻿
 @{
-    ViewData["Title"] = "TryDeleteClientRoute";
+    ViewData["Title"] = "Patvirtinti trinimą";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>Ar tikrai naikinti?</h1>
+        <a asp-action="DeleteClientRoute" asp-controller="PersonalRoutes"
+           asp-route-id="@ViewBag.ClientRouteID" class="btn btn-success" role="button">
+            Taip
+        </a>
+        <a asp-action="OpenClientRouteList" asp-controller="PersonalRoutes" class="btn btn-danger" role="button">
+            Ne
+        </a>
+    </div>
 }
-
-<h1>TryDeleteClientRoute</h1>
-

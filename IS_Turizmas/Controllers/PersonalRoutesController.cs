@@ -415,6 +415,14 @@ namespace IS_Turizmas.Controllers
             ViewBag.ClientRouteID = id;
             return View();
         }
+        public async Task<IActionResult> DeleteClientRoute(int id)
+        {
+            _context.ClientRoute.Remove(_context.ClientRoute.Find(id));
+            _context.SaveChanges();
+
+            //TempData["SuccessMessage"] = "Maršrutas pašalintas";
+            return RedirectToAction("OpenClientRouteList");
+        }
         public async Task<IActionResult> ViewPersonalRoute(int id)
         {
             //ViewBag.ClientRouteID = id;
