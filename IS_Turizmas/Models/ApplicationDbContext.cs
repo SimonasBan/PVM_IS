@@ -30,6 +30,7 @@ namespace IS_Turizmas.Models
         public virtual DbSet<Riddle> Riddle { get; set; }
         public virtual DbSet<ClientOrientationGame> ClientOrientationGame { get; set; }
         public virtual DbSet<OrientationGame_Riddle> OrientationGame_Riddle { get; set; }
+        public virtual DbSet<PersonalRouteItem> PersonalRouteItem { get; set; }
 
 
 
@@ -225,6 +226,25 @@ namespace IS_Turizmas.Models
                     .IsRequired()
                     .HasColumnName("Item")
                     .HasMaxLength(255);
+
+                entity.HasIndex(e => e.userRoute_id)
+                    .HasName("userRoute_id");
+
+                entity.Property(e => e.userRoute_id)
+                    .HasColumnName("userRoute_id")
+                    .HasColumnType("int(11)");
+
+                entity.HasOne(d => d.userRoute_idNavigation)
+                    .WithMany(p => p.PersonalRouteItem)
+                    .HasForeignKey(d => d.userRoute_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("userRoute_id");
+
+                //entity.HasOne(d => d.ClientRoute_IdNavigation)
+                //     .WithMany(p => p.PersonalRouteItem)
+                //     .HasForeignKey(d => d.userRoute_id)
+                //     .OnDelete(DeleteBehavior.ClientSetNull)
+                //     .HasConstraintName("userRoute_id");
             });
 
             modelBuilder.Entity<PlaceOfInterestComment>(entity =>

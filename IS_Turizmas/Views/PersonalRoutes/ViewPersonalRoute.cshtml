@@ -1,0 +1,53 @@
+﻿@model IS_Turizmas.Models.ClientRoute
+
+@{
+    ViewData["Title"] = "ViewPersonalRoute";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>ViewPersonalRoute</h1>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+    </div>
+
+
+    <div class="col-md-10 mx-auto">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">Pavadinimas</th>
+                    <th scope="col">Atstumas</th>
+                    <th scope="col">Aprašymas</th>
+                    <th scope="col">Įvertinimas</th>
+                    <th scope="col">Pradzios data</th>
+                    <th scope="col">Pabaigos data</th>
+                    <th scope="col">Būsena</th>
+                    <th scope="col">Kalendoriaus įrašo data</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@ViewBag.clientRW[0].Name</td>
+                    <td>@ViewBag.clientRW[0].Length km</td>
+                    <td>@ViewBag.clientRW[0].Description</td>
+                    <td>@ViewBag.clientRW[0].Rating </td>
+                    <td>@ViewBag.clientRW[0].Start_date</td>
+                    <td>@ViewBag.clientRW[0].Finish_date</td>
+                    <td>@ViewBag.clientRW[0].State_Id</td>
+                    <td>@ViewBag.clientRW[0].Calendar_date.ToString("MM/dd/yyyy")</td>
+                </tr>
+
+            </tbody>
+        </table>
+        @{if (ViewBag.clientItem.Count>0)
+            {
+            <p>@ViewBag.clientItem[0].Route_Item</p>
+            }
+            else { <p>nėra daiktų</p>}
+            }
+    </div>
+}

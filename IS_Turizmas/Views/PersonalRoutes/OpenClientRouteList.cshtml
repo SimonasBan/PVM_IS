@@ -1,0 +1,60 @@
+﻿
+@using IS_Turizmas.Models
+@{
+    ViewData["Title"] = "Asmeninių maršrutų sąrašas";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>Asmeninis maršrutas</h1>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+        @*<a asp-action="CreatePlaceOfInterest" asp-controller="PlaceOfInterest">
+            Pridėti naują maršrutą
+        </a>*@
+    </div>
+    <div class="col-md-10 mx-auto">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pavadinimas</th>
+                    <th scope="col">Atstumas</th>
+                    <th scope="col">Reitingas</th>
+                    @*<th scope="col">Pradzios data</th>
+                        <th scope="col">Pabaigos data</th>*@
+                    <th scope="col">Veiksmai</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < ViewBag.clientRoutes.Count; i++)
+                {
+                    if (ViewBag.clientRoutes[i].State_Id == 4)
+                        continue;
+                    <tr>
+                        <th>@(i + 1)</th>
+                        <td>@ViewBag.clientRoutes[i].Name</td>
+                        <td>@ViewBag.clientRoutes[i].Length km</td>
+                        <td>@ViewBag.clientRoutes[i].Rating </td>
+                  
+                        <td>
+                            <a asp-action="TryDeleteClientRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                Trinti
+                            </a>
+                            <a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                Peržiūrėti
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+}
+
+

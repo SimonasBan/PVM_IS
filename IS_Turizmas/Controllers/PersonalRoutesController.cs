@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -35,6 +36,25 @@ namespace IS_Turizmas.Controllers
             public string Start_date { get; set; }
             public string Finish_date { get; set; }
             public int State_Id { get; set; }
+            public string? Calendar_date { get; set; }
+            public string? Route_Item { get; set; }
+            public int? Route_Id { get; set; }
+            public int? CurrentNumber { get; set; }
+            public int? Item_id { get; set; }
+        }
+        public class PlaceOfInterestAndRoute
+        {
+            public int Id { get; set; }
+            public string Pavadinimas { get; set; }
+            public string? Aprasymas { get; set; }
+            public string? Miestas { get; set; }
+            public string? Savivaldybe { get; set; }
+            public string? Koordinates { get; set; }
+            public string? Adresas { get; set; }
+            public double? Bilieto_kaina { get; set; }
+            public int? Taskai { get; set; }
+            public int? Eile { get; set; }
+            public int? RouteID { get; set; }
         }
         public async Task<IActionResult> OpenFavouriteRoutes()
         {
@@ -55,18 +75,249 @@ namespace IS_Turizmas.Controllers
                     Rating = Math.Round((double)route.Rating, 2),
                     Start_date = cRoute.Start_date.ToString(),
                     Finish_date = cRoute.Finish_date.ToString(),
+                    State_Id = cRoute.State_Id,
+                    Route_Id = route.Id
+                };
+            var clientRoutesList = clientRoutesWithRoutes.ToList();
+            ViewBag.clientRoutes = clientRoutesList;
+            return View();
+        }
+        public async Task<IActionResult> OpenClientRouteList()
+        {
+            var clientRoutesWithRoutes =
+                from cRoute in _context.ClientRoute
+                join route in _context.Route on cRoute.Route_id equals route.Id
+                select new ClientRoute_Route
+                {
+                    ClientRoute_Id = cRoute.Id,
+                    Length = route.Length,
+                    Name = route.Name,
+                    Description = route.Description,
+                    Rating = Math.Round((double)route.Rating, 2),
+                    Start_date = cRoute.Start_date.ToString(),
+                    Finish_date = cRoute.Finish_date.ToString(),
                     State_Id = cRoute.State_Id
                 };
             var clientRoutesList = clientRoutesWithRoutes.ToList();
             ViewBag.clientRoutes = clientRoutesList;
             return View();
         }
+        public async Task<IActionResult> OpenRouteObjects()
+        {
+            var clientRoutesWithRoutes =
+                from cRoute in _context.ClientRoute
+                join route in _context.Route on cRoute.Route_id equals route.Id
+                select new ClientRoute_Route
+                {
+                    ClientRoute_Id = cRoute.Id,
+                    Length = route.Length,
+                    Name = route.Name,
+                    Description = route.Description,
+                    Rating = Math.Round((double)route.Rating, 2),
+                    Start_date = cRoute.Start_date.ToString(),
+                    Finish_date = cRoute.Finish_date.ToString(),
+                    State_Id = cRoute.State_Id
+                };
+            var clientRoutesList = clientRoutesWithRoutes.ToList();
+            ViewBag.clientRoutes = clientRoutesList;
+            return View();
+        }
+        public async Task<IActionResult> OpenItemList(int id)
+        {
+
+            var clientRoute = _context.ClientRoute.Find(id);
+            var route = _context.Route.Find(clientRoute.Route_id);
+            var route_place = _context.PersonalRouteItem
+                .Where(p => p.userRoute_id == clientRoute.Id);
+
+            ViewBag.personalItemList = route_place.ToList();
+            return View();
+        }
+        public async Task<IActionResult> ReorderRouteObject(int id)
+        {
+            var item = _context.Route_PlaceOfInterest.Find(id);
+
+            var list = _context.Route_PlaceOfInterest
+                .Where(p => p.Route_id == item.Route_id)
+                .Count();
+            ViewBag.count = list;
+            ViewBag.personalRoutePlaceOfInterest = item;
+            return View();
+        }
+        public async Task<IActionResult> OpenRouteObjectAdd(int id)
+        {
+            ViewBag.IDRoute = id;
+            ViewBag.places = _context.PlaceOfInterest.ToList();
+            return View();
+        }
+        public async Task<IActionResult> DeleteRoutePlace(int id)
+        {
+            //if (_signInManager.IsSignedIn(User) && _signInManager.UserManager.GetUserId(User) == _context.Marsrutai.Find(id).FkRegistruotasVartotojas.ToString())
+            var salinimasIsRoute = _context.Route_PlaceOfInterest.Find(id).Route_id;
+            var salinimasNumber = _context.Route_PlaceOfInterest.Find(id).Number;
+            var list1 = _context.Route_PlaceOfInterest
+               .Where(p => p.Route_id == salinimasIsRoute).ToList();
+
+            //_context.SaveChanges();
+            _context.Route_PlaceOfInterest.Remove(_context.Route_PlaceOfInterest.Find(id));
+            await _context.SaveChangesAsync();
+            var list = _context.Route_PlaceOfInterest
+                .Where(p => p.Route_id == salinimasIsRoute).ToList();
+
+            for (int i = 0; i < list.Count(); i++)
+            {
+                Route_PlaceOfInterest place = list[i];
+                
+                    place.Number = i + 1;
+                    _context.Route_PlaceOfInterest.Update(place);
+                
+            }
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Objektas pašalintas";
+            int routeID = (int)TempData["RouteID"];
+            return RedirectToAction("OpenRouteObjectss", new { id = routeID });
+        }
+        public async Task<IActionResult> OpenRouteObjectss(int id)
+        {
+
+            var duomenukai =
+                from routePlaceOfIn in _context.Route_PlaceOfInterest
+                join placeOfIn in _context.PlaceOfInterest on routePlaceOfIn.PlaceOfInterest_id equals placeOfIn.Id
+                where routePlaceOfIn.Route_id == id
+                select new PlaceOfInterestAndRoute
+                {
+                    Id = routePlaceOfIn.Id,
+                    Pavadinimas = placeOfIn.Pavadinimas,
+                    Aprasymas = placeOfIn.Aprasymas,
+                    Miestas = placeOfIn.Miestas,
+                    Adresas = placeOfIn.Adresas,
+                    Bilieto_kaina = placeOfIn.Bilieto_kaina,
+                    Savivaldybe = placeOfIn.Savivaldybe,
+                    Koordinates = placeOfIn.Koordinates,
+                    Taskai = placeOfIn.Taskai,
+                    Eile = routePlaceOfIn.Number,
+                    RouteID = routePlaceOfIn.Route_id
+                };
+            ViewBag.RouteID = id;
+            ViewBag.personalRoutePlaceOfInterestList = duomenukai.OrderBy(o => o.Eile).ToList();
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitRouteInfo(int id, [Bind("Start_date, Finish_date, State_Id, Calendar_date, Route_id," +
+            "CurrentNumber")] ClientRoute place)
+        {
+            var testPlace = _context.ClientRoute.Find(1);
+            ClientRoute oldPlace = _context.ClientRoute.Find(id);
+
+            oldPlace.Start_date = place.Start_date;
+            oldPlace.Finish_date = place.Finish_date;
+            oldPlace.State_Id = place.State_Id;
+            oldPlace.Calendar_date = place.Calendar_date;
+            oldPlace.Route_id = place.Route_id;
+            oldPlace.CurrentNumber = place.CurrentNumber;
+
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Neužpildėte visų laukų";
+                return RedirectToAction("EditPersonalRoute", new { id = id });
+            }
+
+            try
+            {
+                _context.Update(oldPlace);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+                throw;
+            }
+            bool forecastRes = await GetWeatherForecastByDate(2);
+
+            TempData["SuccessMessageR"] = "Maršrutas atnaujintas";
+            return RedirectToAction("EditPersonalRoute", new { id = id });
+
+            //return RedirectToAction("OpenClientRouteList");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPlace(int Route_id, [Bind("Id")] PlaceOfInterest place)
+        {
+            //ClientRoute oldPlace = _context.ClientRoute.Find(id);
+            var list = _context.Route_PlaceOfInterest
+                .Where(p => p.Route_id == Route_id)
+                .Count();
+            Route_PlaceOfInterest naujas = new Route_PlaceOfInterest();
+            naujas.PlaceOfInterest_id = place.Id;
+            naujas.Route_id = Route_id;
+            naujas.Number = list + 1;
+
+
+            try
+            {
+                _context.Route_PlaceOfInterest.Add(naujas);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+                throw;
+            }
+            TempData["SuccessMessage"] = "Objektas pridėtas";
+            return RedirectToAction("OpenRouteObjectss", new { id = Route_id });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveEditedQueue(int id, [Bind("Number")] Route_PlaceOfInterest place)
+        {
+
+            Route_PlaceOfInterest oldPlace = _context.Route_PlaceOfInterest.Find(id);
+            var elem =
+                from p in _context.Route_PlaceOfInterest
+                where p.Route_id == oldPlace.Route_id && p.Id != oldPlace.Id && p.Number == place.Number
+                select new Route_PlaceOfInterest
+                {
+                    Id = p.Id,
+                    PlaceOfInterest_id = p.PlaceOfInterest_id,
+                    Route_id = p.Route_id,
+                    Number = p.Number
+                };
+            var nextObj = elem.ToList();
+
+            int num = (int)TempData["OldNumber"];
+            Route_PlaceOfInterest newel = new Route_PlaceOfInterest();
+            newel.Number = num;
+            newel.Id = nextObj[0].Id;
+            newel.PlaceOfInterest_id = nextObj[0].PlaceOfInterest_id;
+            newel.Route_id = nextObj[0].Route_id;
+
+            oldPlace.Number = place.Number;
+            oldPlace.PlaceOfInterest_id = oldPlace.PlaceOfInterest_id;
+            oldPlace.Route_id = oldPlace.Route_id;
+
+            try
+            {
+                _context.Update(oldPlace);
+                _context.Update(newel);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+                throw;
+            }
+            TempData["SuccessMessage"] = "Eilė atnaujinta";
+            return RedirectToAction("OpenRouteObjectss", new { id = oldPlace.Route_id });
+        }
+
 
         public async Task<IActionResult> SubmitRouteInfo(int clientRouteId)
         {
             bool forecastRes = await GetWeatherForecastByDate(clientRouteId);
 
-            return RedirectToAction("OpenFavouriteRoutes");
+            return RedirectToAction("EditPersonalRoute", new { id = 2 }); 
         }
         public async Task<IActionResult> StartRoute(int id)
         {
@@ -118,6 +369,95 @@ namespace IS_Turizmas.Controllers
             //ViewBag.Riddle = Riddle;
             //ViewBag.Place = Place;
             //return View();
+            return View();
+        }
+        public async Task<IActionResult> EditPersonalRoute(int id)
+        {
+            //ClientRoute personalRouteToEdit = _context.ClientRoute.Find(id);
+            //ViewBag.PlaceToEdit = personalRouteToEdit;
+            var clientRouteImportantItem =
+                from route in _context.Route
+                join cRoute in _context.ClientRoute on route.Id equals cRoute.Route_id
+                join itemRoute in _context.PersonalRouteItem on cRoute.Item_id equals itemRoute.Id
+                where route.Id == id
+                select new ClientRoute_Route
+                {
+                    Item_id = itemRoute.Id
+                };
+            ViewBag.clientItemEdit = clientRouteImportantItem.ToList();
+
+
+            var clientRoutesWithRoutes =
+                from cRoute in _context.ClientRoute
+                join route in _context.Route on cRoute.Route_id equals route.Id
+                where cRoute.Id == id
+                select new ClientRoute_Route
+                {
+                    ClientRoute_Id = cRoute.Id,
+                    Length = route.Length,
+                    Name = route.Name,
+                    Description = route.Description,
+                    Rating = Math.Round((double)route.Rating, 2),
+                    Start_date = cRoute.Start_date.ToString(),
+                    Finish_date = cRoute.Finish_date.ToString(),
+                    State_Id = cRoute.State_Id,
+                    Calendar_date = cRoute.Calendar_date.ToString(),
+                    Route_Id = route.Id,
+                    CurrentNumber = cRoute.CurrentNumber,
+                };
+            var clientRoutesList = clientRoutesWithRoutes.ToList();
+            ViewBag.clientRouteToEdit = clientRoutesList;
+            return View();
+        }
+        public async Task<IActionResult> TryDeleteClientRoute(int id)
+        {
+            ViewBag.ClientRouteID = id;
+            return View();
+        }
+        public async Task<IActionResult> DeleteClientRoute(int id)
+        {
+            _context.ClientRoute.Remove(_context.ClientRoute.Find(id));
+            _context.SaveChanges();
+
+            //TempData["SuccessMessage"] = "Maršrutas pašalintas";
+            return RedirectToAction("OpenClientRouteList");
+        }
+        public async Task<IActionResult> ViewPersonalRoute(int id)
+        {
+            //ViewBag.ClientRouteID = id;
+            var clientRoutesWithRoutes =
+                from route in _context.Route
+                join cRoute in _context.ClientRoute on route.Id equals cRoute.Route_id
+                where route.Id == cRoute.Route_id
+                select new ClientRoute_Route
+                {
+                    ClientRoute_Id = cRoute.Id,
+                    Length = route.Length,
+                    Name = route.Name,
+                    Description = route.Description,
+                    Rating = Math.Round((double)route.Rating, 2),
+                    Start_date = cRoute.Start_date.ToString(),
+                    Finish_date = cRoute.Finish_date.ToString(),
+                    State_Id = cRoute.State_Id,
+                    Calendar_date = cRoute.Calendar_date.ToString()
+                };
+            var clientRoutesList = clientRoutesWithRoutes.ToList();
+            ViewBag.clientRW = clientRoutesList;
+
+            var clientRouteImportantItem =
+                from route in _context.Route
+                join cRoute in _context.ClientRoute on route.Id equals cRoute.Route_id
+                join itemRoute in _context.PersonalRouteItem on cRoute.Item_id equals itemRoute.Id
+                where route.Id == id
+                select new ClientRoute_Route
+                {
+                    Route_Item = itemRoute.Item
+                };
+            var itemList = clientRouteImportantItem.ToList();
+            ViewBag.clientItem = itemList;
+
+
+
             return View();
         }
         public class LocationDetails_IpApi
@@ -214,7 +554,7 @@ namespace IS_Turizmas.Controllers
             {
                 TempData["SuccessMessage"] = "Aplankymas uzskaitytas! " + " Esate nutole " + Math.Round(distance, 2).ToString() + " km nuo vietos!";
             }
-            
+
 
             if (nextPlace == null)
             {
@@ -252,6 +592,12 @@ namespace IS_Turizmas.Controllers
          */
         public async Task<bool> GetWeatherForecastByDate(int clientRouteId)
         {
+            //var testItemRoute = _context.PersonalRouteItem
+            //    .Where(o => o.userRoute_id == 1).Select(o => o.Item).ToArray();
+
+            var test2 = _context.PersonalRouteItem.Include(o => o.userRoute_idNavigation)
+                .Select(o => o.userRoute_idNavigation.Start_date).ToArray();
+
             var currClientRoute = _context.ClientRoute.Find(clientRouteId);
 
             var currRoute = _context.ClientRoute
@@ -283,12 +629,13 @@ namespace IS_Turizmas.Controllers
                 TempData["ErrorMessage"] = "Nepavyko gauti orų. Per tolima data.";
                 return false;
                 //return RedirectToAction("OpenFavouriteRoutes");
-            } else if (currClientRoute.Calendar_date < DateTime.Today)
+            }
+            else if (currClientRoute.Calendar_date < DateTime.Today)
             {
                 TempData["ErrorMessage"] = "Nepavyko gauti orų. Data jau praėjusi.";
                 return false;
             }
-                
+
 
             var firstForecastList = firstPlaceForecast["list"]
                 .Select(o =>
@@ -301,7 +648,7 @@ namespace IS_Turizmas.Controllers
                     {
                         return null;
                     }
-                    
+
                 })
                 .Where(jo => jo != null)
                 .ToList();
@@ -359,7 +706,7 @@ namespace IS_Turizmas.Controllers
                 try
                 {
                     _context.Update(currClientRoute);
-                    await _context.SaveChangesAsync();                    
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
