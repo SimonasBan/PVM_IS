@@ -1,0 +1,45 @@
+﻿@model IEnumerable<IS_Turizmas.Models.Route>
+
+@{
+    ViewData["Title"] = "GetRouteRecommendations";
+}
+
+
+<div class="container-fluid">
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>Maršrutų rekomendacijos</h1>
+        <p></p>
+            <table class="table table-striped text-center">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Rating)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Length)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < ViewBag.recommendedRoutes.Count; i++)
+                    {
+                        <tr>
+                            <th>@(i + 1)</th>
+                            <td>@ViewBag.recommendedRoutes[i].Rating.ToString("0.00")</td>
+                            <td>@ViewBag.recommendedRoutes[i].Length (km)</td>
+                            <td>@ViewBag.recommendedRoutes[i].Name</td>
+                            <td>@ViewBag.recommendedRoutes[i].Description </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
