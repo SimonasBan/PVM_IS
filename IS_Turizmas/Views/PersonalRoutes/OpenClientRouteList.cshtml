@@ -1,7 +1,7 @@
 ﻿
 @using IS_Turizmas.Models
 @{
-    ViewData["Title"] = "Asmeninis maršrutas";
+    ViewData["Title"] = "Asmeninių maršrutų sąrašas";
     <div class="col-md-10 mx-auto text-center py-3 my-3">
         <h1>Asmeninis maršrutas</h1>
         @if (TempData["SuccessMessage"] != null)
@@ -12,9 +12,9 @@
         {
             <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
         }
-        <a asp-action="CreatePlaceOfInterest" asp-controller="PlaceOfInterest">
+        @*<a asp-action="CreatePlaceOfInterest" asp-controller="PlaceOfInterest">
             Pridėti naują maršrutą
-        </a>
+        </a>*@
     </div>
     <div class="col-md-10 mx-auto">
         <table class="table table-striped text-center">
@@ -25,7 +25,7 @@
                     <th scope="col">Atstumas</th>
                     <th scope="col">Reitingas</th>
                     @*<th scope="col">Pradzios data</th>
-                    <th scope="col">Pabaigos data</th>*@
+                        <th scope="col">Pabaigos data</th>*@
                     <th scope="col">Veiksmai</th>
                 </tr>
             </thead>
@@ -40,7 +40,7 @@
                         <td>@ViewBag.clientRoutes[i].Length km</td>
                         <td>@ViewBag.clientRoutes[i].Rating </td>
                         @*<td>@ViewBag.clientRoutes[i].Start_date</td>
-                        <td>@ViewBag.clientRoutes[i].Finish_date</td>*@
+                            <td>@ViewBag.clientRoutes[i].Finish_date</td>*@
                         @*@if (ViewBag.clientRoutes[i].State_Id == 1)
                             {
                                 <td>
@@ -65,23 +65,23 @@
                                     </a>
                                 </td>
                             }*@
-                    <td>
-                        <a asp-action="TryDeleteClientRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                            Trinti
-                        </a>
-                        @*<a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                            Redaguoti
-                        </a>*@
-                        <a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                            Peržiūrėti
-                        </a>
-                    </td>
+                        <td>
+                            <a asp-action="TryDeleteClientRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                Trinti
+                            </a>
+                            @*<a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                    Redaguoti
+                                </a>*@
+                            <a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
+                                Peržiūrėti
+                            </a>
+                        </td>
 
                     </tr>
                 }
             </tbody>
         </table>
-       
+
     </div>
 }
 @*<td>

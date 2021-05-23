@@ -1,0 +1,65 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using IS_Turizmas.Models
+@*@model List<IS_Turizmas.Models.PlaceOfInterest>*@
+@model IS_Turizmas.Models.Route_PlaceOfInterest
+@{
+    ViewData["Title"] = "AddPlaceOfInterest";
+    <div class="col-md-10 mx-auto text-center py-3 my-3">
+        <h1>Pridėti lankytiną objektą</h1>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+    </div>
+
+    <div class="col-md-10 mx-auto">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pavadinimas</th>
+                    <th scope="col">Aprašymas</th>
+                    <th scope="col">Miestas</th>
+                    <th scope="col">Adresas</th>
+                    <th scope="col">Savivaldybė</th>
+                    <th scope="col">Koordinatės</th>
+                    <th scope="col">Bilieto kaina</th>
+                    <th scope="col">Taškai</th>
+                    <th scope="col">Veiksmai</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < ViewBag.places.Count; i++)
+                {
+                    <tr>
+                        <th>@(i + 1)</th>
+                        <td>@ViewBag.places[i].Pavadinimas</td>
+                        <td>@ViewBag.places[i].Aprasymas</td>
+                        <td>@ViewBag.places[i].Miestas</td>
+                        <td>@ViewBag.places[i].Adresas</td>
+                        <td>@ViewBag.places[i].Savivaldybe</td>
+                        <td>@ViewBag.places[i].Koordinates</td>
+                        <td>@String.Format("{0:N2}", @ViewBag.places[i].Bilieto_kaina) &#8364;</td>
+                        <td>@ViewBag.places[i].Taskai</td>
+                        <td>
+                            <form asp-controller="PersonalRoutes" asp-action="AddPlace" asp-route-id="@ViewBag.IDRoute" method="POST">
+                                <input  asp-for="Id" value="@ViewBag.places[i].Id"  style="display:none" />
+                                <input  asp-for="Route_id" value="@ViewBag.IDRoute"  style="display:none" />
+
+                                <input type="submit" value="Pridėti @ViewBag.IDRoute" />
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+}
+

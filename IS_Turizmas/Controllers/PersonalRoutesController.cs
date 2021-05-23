@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -35,14 +36,15 @@ namespace IS_Turizmas.Controllers
             public string Start_date { get; set; }
             public string Finish_date { get; set; }
             public int State_Id { get; set; }
-            public DateTime? Calendar_date { get; set; }
+            public string? Calendar_date { get; set; }
             public string? Route_Item { get; set; }
             public int? Route_Id { get; set; }
             public int? CurrentNumber { get; set; }
             public int? Item_id { get; set; }
         }
-        public class PlaceOfInterestAndOrder
+        public class PlaceOfInterestAndRoute
         {
+            public int Id { get; set; }
             public string Pavadinimas { get; set; }
             public string? Aprasymas { get; set; }
             public string? Miestas { get; set; }
@@ -52,6 +54,7 @@ namespace IS_Turizmas.Controllers
             public double? Bilieto_kaina { get; set; }
             public int? Taskai { get; set; }
             public int? Eile { get; set; }
+            public int? RouteID { get; set; }
         }
         public async Task<IActionResult> OpenFavouriteRoutes()
         {
@@ -80,7 +83,7 @@ namespace IS_Turizmas.Controllers
             return View();
         }
         public async Task<IActionResult> OpenClientRouteList()
-        {            
+        {
             var clientRoutesWithRoutes =
                 from cRoute in _context.ClientRoute
                 join route in _context.Route on cRoute.Route_id equals route.Id
@@ -121,19 +124,7 @@ namespace IS_Turizmas.Controllers
         }
         public async Task<IActionResult> OpenItemList(int id)
         {
-            //var clientRoutesWithRoutes =
-            //    from cRoute in _context.ClientRoute
-            //    join items in _context.PersonalRouteItem on cRoute.ID equals item.fk_client_id
-            //    select new Item
-            //    {
-            //        
-            //    };
-            //var clientRoutesList = clientRoutesWithRoutes.ToList();
-            //ViewBag.clientRoutes = clientRoutesList;
-            //var clientRoute = _context.ClientRoute.Find(id);
-            //var route = _context.Route.Find(clientRoute.Route_id);
-            //var route_place = _context.PersonalRouteItem
-            //    .Where(p => p.Id == route.Id);
+
             var clientRoute = _context.ClientRoute.Find(id);
             var route = _context.Route.Find(clientRoute.Route_id);
             var route_place = _context.PersonalRouteItem
@@ -142,20 +133,62 @@ namespace IS_Turizmas.Controllers
             ViewBag.personalItemList = route_place.ToList();
             return View();
         }
+        public async Task<IActionResult> ChangeQueue(int id)
+        {
+            var item = _context.Route_PlaceOfInterest.Find(id);
+
+            var list = _context.Route_PlaceOfInterest
+                .Where(p => p.Route_id == item.Route_id)
+                .Count();
+            ViewBag.count = list;
+            ViewBag.personalRoutePlaceOfInterest = item;
+            return View();
+        }
+        public async Task<IActionResult> AddPlaceOfInterest(int id)
+        {
+            ViewBag.IDRoute = id;
+            ViewBag.places = _context.PlaceOfInterest.ToList();
+            return View();
+        }
+        public async Task<IActionResult> DeleteRoutePlaceOfInterest(int id)
+        {
+            //if (_signInManager.IsSignedIn(User) && _signInManager.UserManager.GetUserId(User) == _context.Marsrutai.Find(id).FkRegistruotasVartotojas.ToString())
+            var salinimasIsRoute = _context.Route_PlaceOfInterest.Find(id).Route_id;
+            var salinimasNumber = _context.Route_PlaceOfInterest.Find(id).Number;
+            var list1 = _context.Route_PlaceOfInterest
+               .Where(p => p.Route_id == salinimasIsRoute).ToList();
+
+            //_context.SaveChanges();
+            _context.Route_PlaceOfInterest.Remove(_context.Route_PlaceOfInterest.Find(id));
+            await _context.SaveChangesAsync();
+            var list = _context.Route_PlaceOfInterest
+                .Where(p => p.Route_id == salinimasIsRoute).ToList();
+
+            for (int i = 0; i < list.Count(); i++)
+            {
+                Route_PlaceOfInterest place = list[i];
+                
+                    place.Number = i + 1;
+                    _context.Route_PlaceOfInterest.Update(place);
+                
+            }
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Objektas pašalintas";
+            int routeID = (int)TempData["RouteID"];
+            return RedirectToAction("OpenRouteObjectss", new { id = routeID });
+        }
         public async Task<IActionResult> OpenRouteObjectss(int id)
         {
-           
-            var route = _context.Route.Find(id);
-            var route_place = _context.Route_PlaceOfInterest
-                .Where(p => p.Route_id == route.Id);
 
             var duomenukai =
                 from routePlaceOfIn in _context.Route_PlaceOfInterest
                 join placeOfIn in _context.PlaceOfInterest on routePlaceOfIn.PlaceOfInterest_id equals placeOfIn.Id
                 where routePlaceOfIn.Route_id == id
                 orderby routePlaceOfIn.Number
-                select new PlaceOfInterestAndOrder
+                select new PlaceOfInterestAndRoute
                 {
+                    Id = routePlaceOfIn.Id,
                     Pavadinimas = placeOfIn.Pavadinimas,
                     Aprasymas = placeOfIn.Aprasymas,
                     Miestas = placeOfIn.Miestas,
@@ -164,10 +197,11 @@ namespace IS_Turizmas.Controllers
                     Savivaldybe = placeOfIn.Savivaldybe,
                     Koordinates = placeOfIn.Koordinates,
                     Taskai = placeOfIn.Taskai,
-                    Eile= routePlaceOfIn.Number
+                    Eile = routePlaceOfIn.Number,
+                    RouteID = routePlaceOfIn.Route_id
                 };
-
-            ViewBag.personalRoutePlaceOfInterestList = duomenukai.OrderBy(o=>o.Eile).ToList();
+            ViewBag.RouteID = id;
+            ViewBag.personalRoutePlaceOfInterestList = duomenukai.OrderBy(o => o.Eile).ToList();
             return View();
         }
         [HttpPost]
@@ -177,11 +211,6 @@ namespace IS_Turizmas.Controllers
         {
             var testPlace = _context.ClientRoute.Find(1);
             ClientRoute oldPlace = _context.ClientRoute.Find(id);
-            ////if (oldRoute.FkRegistruotasVartotojas != int.Parse(_signInManager.UserManager.GetUserId(User)))
-            ////{
-            ////    return NotFound();
-            ////}
-
 
             oldPlace.Start_date = place.Start_date;
             oldPlace.Finish_date = place.Finish_date;
@@ -190,18 +219,11 @@ namespace IS_Turizmas.Controllers
             oldPlace.Route_id = place.Route_id;
             oldPlace.CurrentNumber = place.CurrentNumber;
 
-            ////if (!ModelState.IsValid)
-            ////{
-            ////    ViewBag.LaikoIverciai = _context.LaikoIverciai.ToList();
-            ////    return View("~/Views/Routes/EditRouteDescription.cshtml");
-            ////}
-
-            //if (!ModelState.IsValid)
-            //{
-            //    TempData["ErrorMessage"] = "Neužpildėte visų laukų";
-            //    return RedirectToAction("EditPlaceOfInterest", new { id = id });
-            //}
-
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Neužpildėte visų laukų";
+                return RedirectToAction("EditPersonalRoute", new { id = id });
+            }
 
             try
             {
@@ -213,8 +235,82 @@ namespace IS_Turizmas.Controllers
                 return NotFound();
                 throw;
             }
-            TempData["SuccessMessage"] = "Objektas užsaugotas";
-            return RedirectToAction("OpenClientRouteList");
+            bool forecastRes = await GetWeatherForecastByDate(2);
+
+            TempData["SuccessMessageR"] = "Maršrutas atnaujintas";
+            return RedirectToAction("EditPersonalRoute", new { id = id });
+
+            //return RedirectToAction("OpenClientRouteList");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPlace(int Route_id, [Bind("Id")] PlaceOfInterest place)
+        {
+            //ClientRoute oldPlace = _context.ClientRoute.Find(id);
+            var list = _context.Route_PlaceOfInterest
+                .Where(p => p.Route_id == Route_id)
+                .Count();
+            Route_PlaceOfInterest naujas = new Route_PlaceOfInterest();
+            naujas.PlaceOfInterest_id = place.Id;
+            naujas.Route_id = Route_id;
+            naujas.Number = list + 1;
+
+
+            try
+            {
+                _context.Route_PlaceOfInterest.Add(naujas);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+                throw;
+            }
+            TempData["SuccessMessage"] = "Objektas pridėtas";
+            return RedirectToAction("OpenRouteObjectss", new { id = Route_id });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveEditedQueqe(int id, [Bind("Number")] Route_PlaceOfInterest place)
+        {
+
+            Route_PlaceOfInterest oldPlace = _context.Route_PlaceOfInterest.Find(id);
+            var elem =
+                from p in _context.Route_PlaceOfInterest
+                where p.Route_id == oldPlace.Route_id && p.Id != oldPlace.Id && p.Number == place.Number
+                select new Route_PlaceOfInterest
+                {
+                    Id = p.Id,
+                    PlaceOfInterest_id = p.PlaceOfInterest_id,
+                    Route_id = p.Route_id,
+                    Number = p.Number
+                };
+            var nextObj = elem.ToList();
+
+            int num = (int)TempData["OldNumber"];
+            Route_PlaceOfInterest newel = new Route_PlaceOfInterest();
+            newel.Number = num;
+            newel.Id = nextObj[0].Id;
+            newel.PlaceOfInterest_id = nextObj[0].PlaceOfInterest_id;
+            newel.Route_id = nextObj[0].Route_id;
+
+            oldPlace.Number = place.Number;
+            oldPlace.PlaceOfInterest_id = oldPlace.PlaceOfInterest_id;
+            oldPlace.Route_id = oldPlace.Route_id;
+
+            try
+            {
+                _context.Update(oldPlace);
+                _context.Update(newel);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+                throw;
+            }
+            TempData["SuccessMessage"] = "Eilė atnaujinta";
+            return RedirectToAction("OpenRouteObjectss", new { id = oldPlace.Route_id });
         }
 
 
@@ -222,7 +318,7 @@ namespace IS_Turizmas.Controllers
         {
             bool forecastRes = await GetWeatherForecastByDate(clientRouteId);
 
-            return RedirectToAction("OpenFavouriteRoutes");
+            return RedirectToAction("EditPersonalRoute", new { id = 2 }); 
         }
         public async Task<IActionResult> StartRoute(int id)
         {
@@ -289,7 +385,7 @@ namespace IS_Turizmas.Controllers
                 {
                     Item_id = itemRoute.Id
                 };
-            ViewBag.clientItemEdit =  clientRouteImportantItem.ToList();
+            ViewBag.clientItemEdit = clientRouteImportantItem.ToList();
 
 
             var clientRoutesWithRoutes =
@@ -306,9 +402,9 @@ namespace IS_Turizmas.Controllers
                     Start_date = cRoute.Start_date.ToString(),
                     Finish_date = cRoute.Finish_date.ToString(),
                     State_Id = cRoute.State_Id,
-                    Calendar_date = cRoute.Calendar_date,
-                    Route_Id=route.Id,
-                    CurrentNumber=cRoute.CurrentNumber,
+                    Calendar_date = cRoute.Calendar_date.ToString(),
+                    Route_Id = route.Id,
+                    CurrentNumber = cRoute.CurrentNumber,
                 };
             var clientRoutesList = clientRoutesWithRoutes.ToList();
             ViewBag.clientRouteToEdit = clientRoutesList;
@@ -336,7 +432,7 @@ namespace IS_Turizmas.Controllers
                     Start_date = cRoute.Start_date.ToString(),
                     Finish_date = cRoute.Finish_date.ToString(),
                     State_Id = cRoute.State_Id,
-                    Calendar_date = cRoute.Calendar_date
+                    Calendar_date = cRoute.Calendar_date.ToString()
                 };
             var clientRoutesList = clientRoutesWithRoutes.ToList();
             ViewBag.clientRW = clientRoutesList;
@@ -526,12 +622,13 @@ namespace IS_Turizmas.Controllers
                 TempData["ErrorMessage"] = "Nepavyko gauti orų. Per tolima data.";
                 return false;
                 //return RedirectToAction("OpenFavouriteRoutes");
-            } else if (currClientRoute.Calendar_date < DateTime.Today)
+            }
+            else if (currClientRoute.Calendar_date < DateTime.Today)
             {
                 TempData["ErrorMessage"] = "Nepavyko gauti orų. Data jau praėjusi.";
                 return false;
             }
-                
+
 
             var firstForecastList = firstPlaceForecast["list"]
                 .Select(o =>

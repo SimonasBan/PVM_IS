@@ -11,7 +11,10 @@
         {
             <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
         }
-       
+        <a asp-action="AddPlaceOfInterest" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.RouteID">
+            Pridėti lankytiną objektą
+        </a>
+
     </div>
     <div class="col-md-10 mx-auto">
         <table class="table table-striped text-center">
@@ -30,39 +33,14 @@
             <tbody>
                 @for (var i = 0; i < ViewBag.personalRoutePlaceOfInterestList.Count; i++)
                 {
-                    
+
                     <tr>
                         <th>@(i + 1)</th>
                         <td>@ViewBag.personalRoutePlaceOfInterestList[i].Pavadinimas</td>
                         <td>@ViewBag.personalRoutePlaceOfInterestList[i].Aprasymas</td>
                         <td>@ViewBag.personalRoutePlaceOfInterestList[i].Miestas</td>
                         <td>@ViewBag.personalRoutePlaceOfInterestList[i].Eile</td>
-                        @*<td>@ViewBag.clientRoutes[i].Start_date</td>
-                            <td>@ViewBag.clientRoutes[i].Finish_date</td>*@
-                        @*@if (ViewBag.clientRoutes[i].State_Id == 1)
-                            {
-                                <td>
-                                    <a asp-action="StartRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                                        Pradėti
-                                    </a>
-                                </td>
-                            }
-                            else if (ViewBag.clientRoutes[i].State_Id == 2)
-                            {
-                                <td>
-                                    <a asp-action="ContinueRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                                        Tęsti
-                                    </a>
-                                </td>
-                            }
-                            else if (ViewBag.clientRoutes[i].State_Id == 3)
-                            {
-                                <td>
-                                    <a>
-                                        Pabaigta
-                                    </a>
-                                </td>
-                            }*@
+                        
                         @*<td>
                             <a asp-action="TryDeleteClientRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
                                 Trinti
@@ -74,17 +52,21 @@
                                 Kiesti elės Nr.
                             </a>
                         </td>*@
-                        <td>
-                            <a asp-action="EditPersonalRoute" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.clientRoutes[i].ClientRoute_Id">
-                                Kiesti elės Nr.
-                            </a>
-                        </td>
+
+                    <td>
+                        <a asp-action="DeleteRoutePlaceOfInterest" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.personalRoutePlaceOfInterestList[i].Id">
+                            Trinti
+                        </a>
+                        @{TempData["RouteID"] = ViewBag.personalRoutePlaceOfInterestList[i].RouteID;}
+                        <a asp-action="ChangeQueue" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.personalRoutePlaceOfInterestList[i].Id">
+                            Kiesti elės Nr.
+                        </a>
+                    </td>
 
                     </tr>
                 }
             </tbody>
         </table>
-
     </div>
 }
 

@@ -1,7 +1,45 @@
-﻿
+﻿@model IS_Turizmas.Models.Route_PlaceOfInterest
+
 @{
+    <script>
+        document.getElementById("description-text").value += 'Test Feedback';
+    </script>
+
     ViewData["Title"] = "ChangeQueue";
+
+
+    <div class="container-fluid">
+        <div class="col-md-10 mx-auto text-center py-3 my-3">
+            <h4>Redaguoti lankytiną objektą</h4>
+        </div>
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+        <div class="row">
+            <div class="col-md-10 mx-auto">
+                <form asp-controller="PersonalRoutes" asp-action="SaveEditedQueqe" asp-route-id="@ViewBag.personalRoutePlaceOfInterest.Id" method="POST">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label><strong>Dabartinė eilė:</strong> @ViewBag.personalRoutePlaceOfInterest.Number</label>
+                    @{TempData["OldNumber"] = ViewBag.personalRoutePlaceOfInterest.Number;}
+                    @*<input type="text" class="form-control" value="@ViewBag.personalRoutePlaceOfInterest.Count" readonly />*@
+
+                </div>
+                <label >Pasirinkti naują eilės numerį:</label>
+                <select  asp-for="Number">
+                    @{ for (int i = 1; i <= ViewBag.count; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    }
+                </select">
+                <div>
+                    <button type="submit" class="btn btn-primary">Išsaugoti</button>
+                </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
 }
-
-<h1>ChangeQueue</h1>
-
