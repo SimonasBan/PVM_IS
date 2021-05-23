@@ -302,6 +302,11 @@ namespace IS_Turizmas.Controllers
             TempData["SuccessMessage"] = "Objektas pridėtas";
             return RedirectToAction("OpenRouteObjectss", new { id = Route_id });
         }
+        public async Task<IActionResult> AddNewItem(int id)
+        {
+            ViewBag.Routeid = id;
+            return View();
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddItem(int id, [Bind("Item", "userRoute_id")] PersonalRouteItem itemas)
@@ -528,6 +533,7 @@ namespace IS_Turizmas.Controllers
             var recommendations =
                 from recommendedRoutes in _context.Route
                 where !clinetR.Any(r => recommendedRoutes.Id == r.Route_id) && recommendedRoutes.Rating > 8
+                orderby recommendedRoutes.Rating descending
                 select recommendedRoutes;
             ViewBag.recommendedRoutes = recommendations.ToList();
             return View();

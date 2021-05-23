@@ -11,7 +11,7 @@
         {
             <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
         }
-        <a asp-action="AddNewItem" asp-controller="PersonalRoutes">
+        <a asp-action="AddNewItem" asp-controller="PersonalRoutes" asp-route-id="@ViewBag.personalItemList[0].userRoute_id">
                 Pridėti naują daiktą
         </a>
     </div>
