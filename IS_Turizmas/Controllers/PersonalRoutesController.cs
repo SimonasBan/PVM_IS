@@ -208,7 +208,7 @@ namespace IS_Turizmas.Controllers
         public async Task<IActionResult> SubmitRouteInfo(int id, [Bind("Start_date, Finish_date, State_Id, Calendar_date, Route_id," +
             "CurrentNumber")] ClientRoute place)
         {
-            var testPlace = _context.ClientRoute.Find(1);
+            //var testPlace = _context.ClientRoute.Find(1);
             ClientRoute oldPlace = _context.ClientRoute.Find(id);
 
             oldPlace.Start_date = place.Start_date;
@@ -234,9 +234,13 @@ namespace IS_Turizmas.Controllers
                 return NotFound();
                 throw;
             }
-            bool forecastRes = await GetWeatherForecastByDate(2);
-
+            bool forecastRes = await GetWeatherForecastByDate(place.Route_id);
+            //bool forecastRes = await GetWeatherForecastByDate(2);            
             TempData["SuccessMessageR"] = "Maršrutas atnaujintas";
+            if (forecastRes)
+            {
+                TempData["SuccessMessageR"] += "|Pridėtas skėtis";
+            }
             return RedirectToAction("EditPersonalRoute", new { id = id });
 
             //return RedirectToAction("OpenClientRouteList");
@@ -602,8 +606,8 @@ namespace IS_Turizmas.Controllers
             //var testItemRoute = _context.PersonalRouteItem
             //    .Where(o => o.userRoute_id == 1).Select(o => o.Item).ToArray();
 
-            var test2 = _context.PersonalRouteItem.Include(o => o.userRoute_idNavigation)
-                .Select(o => o.userRoute_idNavigation.Start_date).ToArray();
+            //var test2 = _context.PersonalRouteItem.Include(o => o.userRoute_idNavigation)
+            //    .Select(o => o.userRoute_idNavigation.Start_date).ToArray();
 
             var currClientRoute = _context.ClientRoute.Find(clientRouteId);
 
@@ -709,6 +713,27 @@ namespace IS_Turizmas.Controllers
 
             if (needsUmbrella)
             {
+                var umbrellaItems = _context.PersonalRouteItem
+                    .Any(o => o.userRoute_id == clientRouteId && o.Item== "Skėtis");
+
+                if (!umbrellaItems)
+                {
+                    PersonalRouteItem newItem = new PersonalRouteItem();
+                    newItem.Item = "Skėtis";
+                    newItem.userRoute_id = clientRouteId;
+
+                    try
+                    {
+                        _context.PersonalRouteItem.Add(newItem);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        return false;
+                        throw;
+                    }
+                }                
+
                 currClientRoute.Item_id = 1;
                 try
                 {
